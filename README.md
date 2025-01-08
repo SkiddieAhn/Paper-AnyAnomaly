@@ -1,12 +1,11 @@
 # AnyAnomaly
-AnyAnomaly: A Zero-shot Approach for Customizable Video Anomaly Detection using LVLM
-- ```Position Context tutorial code```: [[Link]](https://github.com/SkiddieAhn/Preparation-AnyAnomaly/blob/main/tutorial_tc.ipynb)    
-- ```Temporal Context tutorial code```: [[Link]](https://github.com/SkiddieAhn/Preparation-AnyAnomaly/blob/main/tutorial_tc.ipynb)    
-
-## Customizable VAD
+- AnyAnomaly: A Zero-shot Approach for Customizable Video Anomaly Detection using LVLM
 ![image](https://github.com/user-attachments/assets/12201aec-c562-4884-941d-591318ef5da2)
 
 ## AnyAnomaly Model
+- ```Position Context tutorial code```: [[Link]](https://github.com/SkiddieAhn/Preparation-AnyAnomaly/blob/main/tutorial_tc.ipynb)    
+- ```Temporal Context tutorial code```: [[Link]](https://github.com/SkiddieAhn/Preparation-AnyAnomaly/blob/main/tutorial_tc.ipynb)
+  
 ![image](https://github.com/user-attachments/assets/f621d667-6079-41ce-8401-3441b9d4b8da)
 
 ## Command
