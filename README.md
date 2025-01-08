@@ -6,8 +6,8 @@ AnyAnomaly: A Zero-shot Approach for Customizable Video Anomaly Detection using 
 ![image](https://github.com/user-attachments/assets/12201aec-c562-4884-941d-591318ef5da2)
 
 ## AnyAnomaly Model
-- ```Position Context tutorial code```: [[Link]](https://drive.google.com/file/d/1_BRBkodZeIJLbGqs5r4AO76QqZBeQ5WP/view?usp=sharing)    
-- ```Temporal Context tutorial code```: [[Link]](https://drive.google.com/file/d/1Am4d2yMRypMnmvrb11QWco70at9paEb9/view?usp=sharing)
+- ```Position Context tutorial code```: [[Link]](https://colab.research.google.com/drive/1_BRBkodZeIJLbGqs5r4AO76QqZBeQ5WP)    
+- ```Temporal Context tutorial code```: [[Link]](https://colab.research.google.com/drive/1Am4d2yMRypMnmvrb11QWco70at9paEb9#scrollTo=3QGYNpk90Vvq)
   
 ![image](https://github.com/user-attachments/assets/f621d667-6079-41ce-8401-3441b9d4b8da)
 
