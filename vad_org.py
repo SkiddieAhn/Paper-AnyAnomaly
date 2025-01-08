@@ -7,6 +7,8 @@ from fastprogress import progress_bar
 from sklearn import metrics
 from scipy.ndimage import gaussian_filter1d
 from functions.lvlm_func import load_lvlm, lvlm_test, make_instruction
+from transformers import logging
+logging.set_verbosity_error()
 
 
 def main():

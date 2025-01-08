@@ -12,6 +12,8 @@ from functions.attn_func import winclip_attention
 from functions.grid_func import grid_generation
 from functions.key_func import key_frame_selection_four_idx
 import clip
+from transformers import logging
+logging.set_verbosity_error()
 
 
 def main():
