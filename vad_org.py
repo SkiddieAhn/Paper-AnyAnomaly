@@ -19,6 +19,8 @@ def main():
     parser.add_argument('--calc_auc', default=True, type=str2bool, nargs='?', const=True)
     parser.add_argument('--calc_video_auc', default=False, type=str2bool, nargs='?', const=True)
     parser.add_argument('--clip_length', default=None, type=int)
+    parser.add_argument('--template_adaption', default=False, type=str2bool, nargs='?', const=True)
+    parser.add_argument('--class_adaption', default=False, type=str2bool, nargs='?', const=True)
 
     args = parser.parse_args()
     cfg = update_config(args)
