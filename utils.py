@@ -13,21 +13,6 @@ def print_long_string(long_string, width=70):
     print(wrapped_string)
 
 
-def display(img):
-    plt.axis('off')  
-    plt.imshow(img)
-    plt.show()
-
-
-def display_many(images):
-    plt.figure(figsize=(12, 4))  
-    for i, img in enumerate(images):        
-        plt.subplot(1, len(images), i + 1)  
-        plt.imshow(img)
-        plt.axis('off')  
-    plt.show()
-
-
 def print_prompt(check, prompt, prompt2=None):
     if check: 
         print('==========================================')
@@ -152,26 +137,6 @@ def load_names_paths(cfg):
         video_paths = [os.path.join(cfg.test_data_path, name) for name in video_names if not name in except_arr]
 
     return video_names, video_paths
-
-
-def load_names_paths_wa(cfg):
-    except_arr = find_except_arr(cfg)
-    video_names = os.listdir(cfg.test_data_path)
-    video_names.sort()
-    video_names = [name for name in video_names if not name in except_arr]
-    video_paths = [os.path.join(cfg.test_data_path, name) for name in video_names if not name in except_arr]
-    wa_video_paths = [os.path.join(cfg.wa_test_data_path, name) for name in video_names if not name in except_arr]
-    return video_names, video_paths, wa_video_paths
-
-
-def load_names_paths_tc(cfg):
-    except_arr = find_except_arr(cfg)
-    video_names = os.listdir(cfg.test_data_path)
-    video_names.sort()
-    video_names = [name for name in video_names if not name in except_arr]
-    video_paths = [os.path.join(cfg.test_data_path, name) for name in video_names if not name in except_arr]
-    tc_video_paths = [os.path.join(cfg.tc_test_data_path, name) for name in video_names if not name in except_arr]
-    return video_names, video_paths, tc_video_paths
 
 
 def load_keyword_list(cfg):

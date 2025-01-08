@@ -3,11 +3,6 @@ import re
 import os
 import h5py
 import numpy as np
-import json
-from fastprogress import progress_bar
-from sklearn import metrics
-import matplotlib.pyplot as plt
-from scipy.ndimage import gaussian_filter1d
 
 
 def extract_numbers(file_name):
@@ -30,31 +25,7 @@ class clip_path_loader:
         for frame_id in range(curr, curr + self.clip_length):
             image_paths.append(self.imgs[frame_id])
         return image_paths
-
-
-class wa_clip_path_loader:
-    def __init__(self, video_folder, video_folder_wa, clip_length):
-        self.clip_length = clip_length
-        self.imgs = glob.glob(video_folder + '/*.jpg')
-        self.imgs = sorted(self.imgs, key=extract_numbers)
-
-        self.wa_imgs = glob.glob(video_folder_wa + '/*.jpg')
-        self.wa_imgs = sorted(self.wa_imgs, key=extract_numbers)
-
-    def __len__(self):
-        return len(self.imgs) // self.clip_length
-        
-    def __getitem__(self, indice):
-        image_paths = []
-        wa_image_paths = []
-
-        curr = indice * (self.clip_length)
-        for frame_id in range(curr, curr + self.clip_length):
-            image_paths.append(self.imgs[frame_id])
-            wa_image_paths.append(self.wa_imgs[frame_id])
-
-        return image_paths, wa_image_paths
-
+    
 
 class frame_path_loader:
     def __init__(self, video_folder):
@@ -67,23 +38,6 @@ class frame_path_loader:
     def __getitem__(self, indice):
         image_path = self.imgs[indice]
         return image_path
-    
-
-class wa_frame_path_loader:
-    def __init__(self, video_folder, video_folder_wa):
-        self.imgs = glob.glob(video_folder + '/*.jpg')
-        self.imgs = sorted(self.imgs, key=extract_numbers)
-
-        self.wa_imgs = glob.glob(video_folder_wa + '/*.jpg')
-        self.wa_imgs = sorted(self.wa_imgs, key=extract_numbers)
-
-    def __len__(self):
-        return len(self.imgs) 
-        
-    def __getitem__(self, indice):
-        image_path = self.imgs[indice]
-        wa_image_path = self.wa_imgs[indice]
-        return image_path, wa_image_path
     
 
 class label_loader:
@@ -107,3 +61,4 @@ class label_loader:
             for key in f:
                 gt.append(np.array(f[key]))
         return gt
+    
