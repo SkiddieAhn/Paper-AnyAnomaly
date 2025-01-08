@@ -1,16 +1,16 @@
 import torch
 from utils import *
 from data_loader import clip_path_loader, label_loader
-from lvlm_func import load_lvlm, lvlm_test, make_instruction
 from config import update_config
 import argparse
 from fastprogress import progress_bar
 from sklearn import metrics
 from scipy.ndimage import gaussian_filter1d
-from text_func import make_text_embedding
-from attn_func import winclip_attention
-from grid_func import grid_generation
-from ksm import key_frame_selection_four_idx
+from functions.text_func import make_text_embedding
+from functions.lvlm_func import load_lvlm, lvlm_test, make_instruction
+from functions.attn_func import winclip_attention
+from functions.grid_func import grid_generation
+from functions.key_func import key_frame_selection_four_idx
 import clip
 
 
@@ -24,8 +24,8 @@ def main():
     parser.add_argument('--calc_auc', default=True, type=str2bool, nargs='?', const=True)
     parser.add_argument('--calc_video_auc', default=False, type=str2bool, nargs='?', const=True)
     parser.add_argument('--clip_length', default=16, type=int)
-    parser.add_argument('--template_adaption', default=True, type=str2bool, nargs='?', const=True)
-    parser.add_argument('--class_adaption', default=True, type=str2bool, nargs='?', const=True)
+    parser.add_argument('--template_adaption', default=False, type=str2bool, nargs='?', const=True)
+    parser.add_argument('--class_adaption', default=False, type=str2bool, nargs='?', const=True)
 
     args = parser.parse_args()
     cfg = update_config(args)

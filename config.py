@@ -4,8 +4,8 @@ os.environ["HDF5_USE_FILE_LOCKING"] = "FALSE"
 if not os.path.exists('results'):
     os.mkdir('results')
 
-share_config = {'data_root': '/datasets/anomalyDataset/',
-                'cdata_root': 'ground_truth',
+share_config = {'data_root': '/home/sha/datasets',
+                'cdata_root': '/home/sha/datasets/cvad_data',
                 'model_path': 'LVLM/weights/chatunivi'} 
 
 class dict2class:
@@ -45,9 +45,10 @@ def update_config(args=None):
         share_config['test_data_path'] = os.path.join(share_config['data_root'], 'shanghai') + '/testing'
         share_config['type_list'] = ["car", "bicycle", "fighting", "throwing", "hand_truck", "running", "skateboarding", "falling", "jumping", "loitering", "motorcycle"]
 
-    type_ids = {}
-    for i, type in enumerate(share_config['type_list']):
-        type_ids[str(type)] = i
-    share_config['type_id'] = type_ids[args.type]  
+    if args.type != None:
+        type_ids = {}
+        for i, type in enumerate(share_config['type_list']):
+            type_ids[str(type)] = i
+        share_config['type_id'] = type_ids[args.type]  
 
     return dict2class(share_config)

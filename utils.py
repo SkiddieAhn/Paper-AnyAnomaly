@@ -139,6 +139,13 @@ def load_names_paths(cfg):
     return video_names, video_paths
 
 
+def ovad_load_names_paths(cfg):
+    video_names = os.listdir(cfg.test_data_path)
+    video_names.sort()
+    video_paths = [os.path.join(cfg.test_data_path, name) for name in video_names]
+    return video_names, video_paths
+
+
 def load_keyword_list(cfg):
     test_data_name = cfg.type
     if cfg.multiple:

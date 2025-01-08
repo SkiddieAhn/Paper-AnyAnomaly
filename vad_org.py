@@ -1,12 +1,12 @@
 import torch
 from utils import *
 from data_loader import frame_path_loader, label_loader
-from lvlm_func import load_lvlm, lvlm_test, make_instruction
 from config import update_config
 import argparse
 from fastprogress import progress_bar
 from sklearn import metrics
 from scipy.ndimage import gaussian_filter1d
+from functions.lvlm_func import load_lvlm, lvlm_test, make_instruction
 
 
 def main():
