@@ -1,8 +1,7 @@
 # AnyAnomaly
-AnyAnomaly: A Zero-shot Approach for Customizable Video Anomaly Detection using LVLM
+- AnyAnomaly: A Zero-shot Approach for Customizable Video Anomaly Detection using LVLM
   
 ## Customizable VAD
-- AnyAnomaly: A Zero-shot Approach for Customizable Video Anomaly Detection using LVLM
 ![image](https://github.com/user-attachments/assets/12201aec-c562-4884-941d-591318ef5da2)
 
 ## AnyAnomaly Model
