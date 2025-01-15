@@ -64,7 +64,7 @@ def main():
     # anomaly detection
     if cfg.anomaly_detect:
         # load lvlm
-        tokenizer, model = load_lvlm(cfg.model_path)
+        tokenizer, model = load_lvlm(cfg, device)
 
         # load clip model
         clip_model, preprocess = clip.load('ViT-B/32', device=device)
