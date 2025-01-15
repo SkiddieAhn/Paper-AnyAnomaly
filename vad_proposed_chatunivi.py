@@ -7,7 +7,7 @@ from fastprogress import progress_bar
 from sklearn import metrics
 from scipy.ndimage import gaussian_filter1d
 from functions.text_func import make_text_embedding
-from functions.lvlm_func import load_lvlm, lvlm_test, make_instruction
+from functions.chatunivi_func import load_lvlm, lvlm_test, make_instruction
 from functions.attn_func import winclip_attention
 from functions.grid_func import grid_generation
 from functions.key_func import key_frame_selection_four_idx
@@ -28,9 +28,12 @@ def main():
     parser.add_argument('--clip_length', default=16, type=int)
     parser.add_argument('--template_adaption', default=False, type=str2bool, nargs='?', const=True)
     parser.add_argument('--class_adaption', default=False, type=str2bool, nargs='?', const=True)
+    parser.add_argument('--model_path', default='LVLM/weights/chatunivi', type=str)
 
     args = parser.parse_args()
+    chatunivi_model_path = args.model_path
     cfg = update_config(args)
+    cfg['model_path'] = chatunivi_model_path
     cfg.print_cfg()
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu") 
