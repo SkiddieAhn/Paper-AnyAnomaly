@@ -4,9 +4,8 @@ os.environ["HDF5_USE_FILE_LOCKING"] = "FALSE"
 if not os.path.exists('results'):
     os.mkdir('results')
 
-share_config = {'data_root': '/home/sha/datasets',
-                'cdata_root': '/home/sha/datasets/cvad_data',
-                'model_path': 'LVLM/weights/chatunivi'} 
+share_config = {'data_root': 'datasets',
+                'cdata_root': 'ground_truth',} 
 
 class dict2class:
     def __init__(self, config):
