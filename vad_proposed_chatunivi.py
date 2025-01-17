@@ -31,9 +31,7 @@ def main():
     parser.add_argument('--model_path', default='LVLM/weights/chatunivi', type=str)
 
     args = parser.parse_args()
-    chatunivi_model_path = args.model_path
     cfg = update_config(args)
-    cfg['model_path'] = chatunivi_model_path
     cfg.print_cfg()
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu") 
