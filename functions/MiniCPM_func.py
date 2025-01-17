@@ -41,15 +41,15 @@ def make_instruction(prompt_type, keyword, temporal_context=False):
         return instruction, tc_instruction
     
 
-def load_lvlm(cfg, device):
-    if cfg.model_name == 'MiniCPM-V-2_6':
+def load_lvlm(model_path, device):
+    if model_path == 'MiniCPM-V-2_6':
         model = AutoModel.from_pretrained('openbmb/MiniCPM-V-2_6', trust_remote_code=True, attn_implementation='sdpa', torch_dtype=torch.bfloat16) # sdpa or flash_attention_2, no eager
-    elif 'int4' in cfg.model_name:
-        model = AutoModel.from_pretrained(f'openbmb/{cfg.lvlm}', trust_remote_code=True)
+    elif 'int4' in model_path:
+        model = AutoModel.from_pretrained(f'openbmb/{model_path}', trust_remote_code=True)
     else:
-        model = AutoModel.from_pretrained(f'openbmb/{cfg.lvlm}', trust_remote_code=True, torch_dtype=torch.float16)
+        model = AutoModel.from_pretrained(f'openbmb/{model_path}', trust_remote_code=True, torch_dtype=torch.float16)
     
-    tokenizer = AutoTokenizer.from_pretrained(f'openbmb/{cfg.lvlm}', trust_remote_code=True)
+    tokenizer = AutoTokenizer.from_pretrained(f'openbmb/{model_path}', trust_remote_code=True)
     model = model.to(device=device).eval()
     return tokenizer, model
 
