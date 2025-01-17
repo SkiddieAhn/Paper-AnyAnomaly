@@ -1,7 +1,6 @@
 import torch
 import os
 import sys
-sys.path.append(os.path.join('LVLM'))
 from PIL import Image
 from transformers import AutoModel, AutoTokenizer
         
