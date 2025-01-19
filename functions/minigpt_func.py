@@ -68,6 +68,6 @@ def lvlm_test(model, vis_processor, qs, image_path, image=None):
     
     text = prepare_texts([qs], conv_temp)
     
-    answer = model.generate(torch.from_numpy(np.expand_dims(image,axis=0)), text, max_new_tokens=50, do_sample=False)
+    answer = model.generate(torch.from_numpy(np.expand_dims(image,axis=0)), text, max_new_tokens=512, do_sample=False)
     
     return answer
