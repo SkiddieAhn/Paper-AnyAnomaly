@@ -16,6 +16,9 @@ pip install h5py
 pip install fastprogress
 pip install scikit-learn
 pip install openai-clip
+
+# for llava-pp
+pip install opencv-python
 ```
 
 ## Requirements and Installation For ChatUniVi
@@ -95,4 +98,43 @@ conda activate minigptv
 python -u vad_MiniCPM.py --dataset=shtech --type=falling --model_path=MiniGPT-4/eval_configs/minigpt4_llama2_eval.yaml
 # proposed model (AnyAomaly)
 python -u vad_proposed_MiniCPM.py --dataset=shtech --type=falling --model_path=MiniGPT-4/eval_configs/minigpt4_llama2_eval.yaml
+```
+
+
+## Requirements and Installation For LLaVA-pp
+- ```LLaVA-pp```: [[GitHub]](https://github.com/mbzuai-oryx/LLaVA-pp)
+- Install required packages:
+```bash
+git clone https://github.com/mbzuai-oryx/LLaVA-pp.git
+cd LLaVA-pp
+git submodule update --init --recursive
+
+# for LLaMA-3-V
+cp LLaMA-3-V/train.py LLaVA/llava/train/train.py
+cp LLaMA-3-V/conversation.py LLaVA/llava/conversation.py
+cp LLaMA-3-V/builder.py LLaVA/llava/model/builder.py
+cp LLaMA-3-V/llava_llama.py LLaVA/llava/model/language_model/llava_llama.py
+
+# Create enviroments
+conda create -n llava
+cd LLaVA
+pip install --upgrade pip
+pip install -e .
+pip install git+https://github.com/huggingface/transformers@a98c41798cf6ed99e1ff17e3792d6e06a2ff2ff3
+
+# Download the Model (LLaVA-Meta=Llama-3-8B-Instruct-FT)
+sudo apt-get install git-lfs
+git lfs install
+git clone https://huggingface.co/MBZUAI/LLaVA-Meta-Llama-3-8B-Instruct-FT
+```
+
+## Command
+- ```avenue type```: [too_close, bicycle, throwing, running, dancing]
+- ```shtech type```: [car, bicycle, fighting, throwing, hand_truck, running, skateboarding, falling, jumping, loitering, motorcycle]
+- ```model path```: LLaVA-Meta-Llama-3-8B-Instruct-FT, ...
+```Shell
+# Baseline model (Chat-UniVi)
+python -u vad_MiniCPM.py --dataset=shtech --type=falling --model_path=LLaVA-pp/LLaVA-Meta-Llama-3-8B-Instruct-FT
+# proposed model (AnyAomaly)
+python -u vad_proposed_MiniCPM.py --dataset=shtech --type=falling --model_path=LLaVA-pp/LLaVA-Meta-Llama-3-8B-Instruct-FT
 ```
