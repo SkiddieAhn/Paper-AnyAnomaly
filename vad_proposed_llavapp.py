@@ -115,13 +115,7 @@ def main():
 
                         max_score = max(max_score, score)
                         max_score_wa = max(max_score_wa, score_wa)
-                        max_score_tc = max(max_score_tc, score_tc)
-                        
-                        print(response)
-                        print(response_wa)
-                        print(response_tc)
-                        
-                        return 0
+                        max_score_tc = max(max_score_tc, score_tc)                  
 
                     # save frame scores
                     for _ in range(cfg.clip_length):
