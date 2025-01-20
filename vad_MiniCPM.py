@@ -15,7 +15,6 @@ def main():
     parser = argparse.ArgumentParser(description='vad_using_lvlm')
     parser.add_argument('--dataset', default='avenue', type=str)
     parser.add_argument('--type', default='bicycle', type=str)
-    parser.add_argument('--model_name', default='MiniCPM-Llama3-V-2_5', type=str)
     parser.add_argument('--multiple', default=False, type=str2bool, nargs='?', const=True)
     parser.add_argument('--prompt_type', default=1, type=int, help='0: simple, 1: complex')
     parser.add_argument('--anomaly_detect', default=True, type=str2bool, nargs='?', const=True)
@@ -24,11 +23,10 @@ def main():
     parser.add_argument('--clip_length', default=16, type=int)
     parser.add_argument('--template_adaption', default=False, type=str2bool, nargs='?', const=True)
     parser.add_argument('--class_adaption', default=False, type=str2bool, nargs='?', const=True)
+    parser.add_argument('--model_path', default='MiniCPM-Llama3-V-2_5', type=str)
 
     args = parser.parse_args()
-    model_name = args.model_name
     cfg = update_config(args)
-    cfg['model_name'] = model_name
     cfg.print_cfg()
 
 
@@ -60,7 +58,7 @@ def main():
     # anomaly detection
     if cfg.anomaly_detect:
         # load lvlm
-        tokenizer, model = load_lvlm(cfg, device)
+        tokenizer, model = load_lvlm(cfg.model_path, device)
 
         # processing videos
         dict_arr = []

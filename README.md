@@ -16,6 +16,9 @@ pip install h5py
 pip install fastprogress
 pip install scikit-learn
 pip install openai-clip
+
+# for llava-pp
+pip install opencv-python
 ```
 
 ## Requirements and Installation For ChatUniVi
@@ -36,7 +39,7 @@ pip install -e .
 - ```shtech type```: [car, bicycle, fighting, throwing, hand_truck, running, skateboarding, falling, jumping, loitering, motorcycle]
 ```Shell
 # Baseline model (Chat-UniVi)
-python -u vad_chatunivi.py --dataset=shtech --type=falling 
+python -u vad_chatunivi.py --dataset=shtech --type=falling
 # proposed model (AnyAomaly)
 python -u vad_proposed_chatunivi.py --dataset=shtech --type=falling 
 ```
@@ -55,10 +58,83 @@ pip install -r requirements.txt
 ## Command
 - ```avenue type```: [too_close, bicycle, throwing, running, dancing]
 - ```shtech type```: [car, bicycle, fighting, throwing, hand_truck, running, skateboarding, falling, jumping, loitering, motorcycle]
-- ```model name```: MiniCPM-V-2_6, MiniCPM-V-2_6-int4, MiniCPM-Llama3-V-2_5, MiniCPM-Llama3-V-2_5-int4, MiniCPM-V-2, MiniCPM-V
+- ```model path```: MiniCPM-V-2_6, MiniCPM-V-2_6-int4, MiniCPM-Llama3-V-2_5, MiniCPM-Llama3-V-2_5-int4, MiniCPM-V-2, MiniCPM-V
 ```Shell
 # Baseline model (Chat-UniVi)
-python -u vad_MiniCPM.py --dataset=shtech --type=falling --model_name=MiniCPM-Llama3-V-2_5
+python -u vad_MiniCPM.py --dataset=shtech --type=falling --model_path=MiniCPM-Llama3-V-2_5
 # proposed model (AnyAomaly)
-python -u vad_proposed_MiniCPM.py --dataset=shtech --type=falling --model_name=MiniCPM-Llama3-V-2_5
+python -u vad_proposed_MiniCPM.py --dataset=shtech --type=falling --model_path=MiniCPM-Llama3-V-2_5
+```
+
+
+## Requirements and Installation For MiniGPT-4
+- ```MiniGPT-4```: [[GitHub]](https://github.com/Vision-CAIR/MiniGPT-4.git)
+- Install required packages:
+```bash
+git clone https://github.com/Vision-CAIR/MiniGPT-4.git
+cd MiniGPT-4
+conda env create -f environment.yml
+conda activate minigptv
+```
+
+## Following the MiniGPT github for prepare pretrained LLM weights and model checkpoints
+- ```MiniGPT-4```: [[GitHub]](https://github.com/Vision-CAIR/MiniGPT-4.git)
+- LLM weights: Llama 2 Chat 7B, Vicuna V0 13B, Vicuna V0 7B
+- Model checkpoints; MiniGPT-4 (Vicuna 13B), MiniGPT-4 (Vicuna 7B), MiniGPT-4 (LLaMA-2 Chat 7B)
+- set the path on the config file for LLM weights and model checkpoints
+    - LLM weights
+        - LLaMA-2: MiniGPT-4/minigpt4/configs/models/minigpt4_llama2.yaml Line 15
+        - Vicuna: MiniGPT-4/minigpt4/configs/models/minigpt4_vicuna0.yaml Line 18
+    - Model Checkpoints
+        - LLaMA-2: MiniGPT-4/eval_configs/minigpt4_llama2_eval.yaml Line 8
+        - Vicuna: MiniGPT-4/eval_configs/minigpt4_eval.yaml Line 8
+
+## Command
+- ```avenue type```: [too_close, bicycle, throwing, running, dancing]
+- ```shtech type```: [car, bicycle, fighting, throwing, hand_truck, running, skateboarding, falling, jumping, loitering, motorcycle]
+- ```model path```: minigpt4_llama2_eval.yaml, minigpt4_eval.yaml
+```Shell
+# Baseline model (Chat-UniVi)
+python -u vad_MiniCPM.py --dataset=shtech --type=falling --model_path=MiniGPT-4/eval_configs/minigpt4_llama2_eval.yaml
+# proposed model (AnyAomaly)
+python -u vad_proposed_MiniCPM.py --dataset=shtech --type=falling --model_path=MiniGPT-4/eval_configs/minigpt4_llama2_eval.yaml
+```
+
+
+## Requirements and Installation For LLaVA-pp
+- ```LLaVA-pp```: [[GitHub]](https://github.com/mbzuai-oryx/LLaVA-pp)
+- Install required packages:
+```bash
+git clone https://github.com/mbzuai-oryx/LLaVA-pp.git
+cd LLaVA-pp
+git submodule update --init --recursive
+
+# for LLaMA-3-V
+cp LLaMA-3-V/train.py LLaVA/llava/train/train.py
+cp LLaMA-3-V/conversation.py LLaVA/llava/conversation.py
+cp LLaMA-3-V/builder.py LLaVA/llava/model/builder.py
+cp LLaMA-3-V/llava_llama.py LLaVA/llava/model/language_model/llava_llama.py
+
+# Create enviroments
+conda create -n llava
+cd LLaVA
+pip install --upgrade pip
+pip install -e .
+pip install git+https://github.com/huggingface/transformers@a98c41798cf6ed99e1ff17e3792d6e06a2ff2ff3
+
+# Download the Model (LLaVA-Meta=Llama-3-8B-Instruct-FT)
+sudo apt-get install git-lfs
+git lfs install
+git clone https://huggingface.co/MBZUAI/LLaVA-Meta-Llama-3-8B-Instruct-FT
+```
+
+## Command
+- ```avenue type```: [too_close, bicycle, throwing, running, dancing]
+- ```shtech type```: [car, bicycle, fighting, throwing, hand_truck, running, skateboarding, falling, jumping, loitering, motorcycle]
+- ```model path```: LLaVA-Meta-Llama-3-8B-Instruct-FT, ...
+```Shell
+# Baseline model (Chat-UniVi)
+python -u vad_MiniCPM.py --dataset=shtech --type=falling --model_path=LLaVA-pp/LLaVA-Meta-Llama-3-8B-Instruct-FT
+# proposed model (AnyAomaly)
+python -u vad_proposed_MiniCPM.py --dataset=shtech --type=falling --model_path=LLaVA-pp/LLaVA-Meta-Llama-3-8B-Instruct-FT
 ```

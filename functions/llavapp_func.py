@@ -1,9 +1,15 @@
 import torch
 import os
 import sys
+sys.path.append(os.path.join('LLaVA-pp/LLaVA'))
+from llava.constants import IMAGE_TOKEN_INDEX, DEFAULT_IMAGE_TOKEN, DEFAULT_IM_START_TOKEN, DEFAULT_IM_END_TOKEN, IMAGE_PLACEHOLDER
+from llava.conversation import conv_templates
+from llava.model.builder import load_pretrained_model
+from llava.utils import disable_torch_init
+from llava.mm_utils import process_images, tokenizer_image_token, get_model_name_from_path
 from PIL import Image
-from transformers import AutoModel, AutoTokenizer
-        
+
+
 
 def make_instruction(prompt_type, keyword, temporal_context=False):
     # simple
@@ -39,35 +45,73 @@ def make_instruction(prompt_type, keyword, temporal_context=False):
             f"- **Response**: Provide the score as a float, rounded to one decimal place, including a brief reason for the score in **one short sentence**."
         )
         return instruction, tc_instruction
+
+
+def load_lvlm(model_path):
+    disable_torch_init()
+    model_name = get_model_name_from_path(model_path)
+    tokenizer, model, image_processor, context_len = load_pretrained_model(model_path, None, model_name)
+
+    return tokenizer, model, image_processor, context_len
     
 
-def load_lvlm(model_path, device):
-    if model_path == 'MiniCPM-V-2_6':
-        model = AutoModel.from_pretrained('openbmb/MiniCPM-V-2_6', trust_remote_code=True, attn_implementation='sdpa', torch_dtype=torch.bfloat16) # sdpa or flash_attention_2, no eager
-    elif 'int4' in model_path:
-        model = AutoModel.from_pretrained(f'openbmb/{model_path}', trust_remote_code=True)
+def lvlm_test(tokenizer, model, image_processor, qs, image_path, image=None):
+
+    conv_mode = "llama3"
+    temperature = 0.2
+    top_p = 0.7
+    num_beams = 1
+    max_new_tokens = 512
+    
+    image_token_se = DEFAULT_IM_START_TOKEN + DEFAULT_IMAGE_TOKEN + DEFAULT_IM_END_TOKEN
+    if IMAGE_PLACEHOLDER in qs:
+        if model.config.mm_use_im_start_end:
+            qs = re.sub(IMAGE_PLACEHOLDER, image_token_se, qs)
+        else:
+            qs = re.sub(IMAGE_PLACEHOLDER, DEFAULT_IMAGE_TOKEN, qs)
     else:
-        model = AutoModel.from_pretrained(f'openbmb/{model_path}', trust_remote_code=True, torch_dtype=torch.float16)
+        if model.config.mm_use_im_start_end:
+            qs = image_token_se + "\n" + qs
+        else:
+            qs = DEFAULT_IMAGE_TOKEN + "\n" + qs
+
+    conv = conv_templates[conv_mode].copy()
+    conv.append_message(conv.roles[0], qs)
+    conv.append_message(conv.roles[1], None)
+    prompt = conv.get_prompt()
     
-    tokenizer = AutoTokenizer.from_pretrained(f'openbmb/{model_path}', trust_remote_code=True)
-    model = model.to(device=device).eval()
-    return tokenizer, model
-
-
-def lvlm_test(tokenizer, model, qs, image_path, image=None):
     if image is None:
-        image = Image.open(image_path)
+        image = Image.open(image_path).convert("RGB")
     
-    image = image.convert('RGB')
+    image = [image]
+    image_size = [x.size for x in image]
     
-    msgs = [{'role': 'user', 'content': qs}]
+    images_tensor = process_images(
+        image,
+        image_processor,
+        model.config
+    ).to(model.device, dtype=torch.float16)
     
-    answer = model.chat(
-        image=image,
-        msgs=msgs,
-        tokenizer = tokenizer,
-        sampling=False,
-        temperature=0.7,
+    input_ids = (
+        tokenizer_image_token(prompt, tokenizer, IMAGE_TOKEN_INDEX, return_tensors="pt")
+        .unsqueeze(0)
+        .cuda()
     )
     
-    return answer
+    with torch.inference_mode():
+        output_ids = model.generate(
+            input_ids,
+            images=images_tensor,
+            image_sizes=image_size,
+            do_sample=True if temperature > 0 else False,
+            temperature=temperature,
+            top_p=top_p,
+            num_beams=num_beams,
+            max_new_tokens=max_new_tokens,
+            use_cache=False,
+        )
+    
+    outputs = tokenizer.batch_decode(output_ids, skip_special_tokens=True)[0].strip()
+    outputs = outputs.replace("<|end|>", "").strip()
+
+    return outputs

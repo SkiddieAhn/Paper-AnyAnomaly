@@ -7,7 +7,7 @@ from fastprogress import progress_bar
 from sklearn import metrics
 from scipy.ndimage import gaussian_filter1d
 from functions.text_func import make_text_embedding
-from functions.MiniCPM_func import load_lvlm, lvlm_test, make_instruction
+from functions.llavapp_func import load_lvlm, lvlm_test, make_instruction
 from functions.attn_func import winclip_attention
 from functions.grid_func import grid_generation
 from functions.key_func import key_frame_selection_four_idx
@@ -28,7 +28,7 @@ def main():
     parser.add_argument('--clip_length', default=16, type=int)
     parser.add_argument('--template_adaption', default=False, type=str2bool, nargs='?', const=True)
     parser.add_argument('--class_adaption', default=False, type=str2bool, nargs='?', const=True)
-    parser.add_argument('--model_path', default='MiniCPM-Llama3-V-2_5', type=str)
+    parser.add_argument('--model_path', default='LLaVA-pp/LLaVA-Meta-Llama-3-8B-Instruct-FT', type=str)
 
     args = parser.parse_args()
     cfg = update_config(args)
@@ -62,7 +62,7 @@ def main():
     # anomaly detection
     if cfg.anomaly_detect:
         # load lvlm
-        tokenizer, model = load_lvlm(cfg.model_path, device)
+        tokenizer, model, image_processor, context_len = load_lvlm(cfg.model_path)
 
         # load clip model
         clip_model, preprocess = clip.load('ViT-B/32', device=device)
@@ -105,9 +105,9 @@ def main():
                         grid_image = grid_generation(image_paths, keyword, clip_model, device)
 
                         # anomaly detection 
-                        response = lvlm_test(tokenizer, model, instruction, key_image_path, None)
-                        response_wa = lvlm_test(tokenizer, model, instruction, None, wa_image)
-                        response_tc = lvlm_test(tokenizer, model, instruction_tc, None, grid_image)
+                        response = lvlm_test(tokenizer, model, image_processor, instruction, key_image_path, None)
+                        response_wa = lvlm_test(tokenizer, model, image_processor, instruction, None, wa_image)
+                        response_tc = lvlm_test(tokenizer, model, image_processor, instruction_tc, None, grid_image)
 
                         score = generate_output(response)['score']
                         score_wa = generate_output(response_wa)['score']
@@ -115,7 +115,7 @@ def main():
 
                         max_score = max(max_score, score)
                         max_score_wa = max(max_score_wa, score_wa)
-                        max_score_tc = max(max_score_tc, score_tc)
+                        max_score_tc = max(max_score_tc, score_tc)                  
 
                     # save frame scores
                     for _ in range(cfg.clip_length):

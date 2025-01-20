@@ -6,7 +6,7 @@ import argparse
 from fastprogress import progress_bar
 from sklearn import metrics
 from scipy.ndimage import gaussian_filter1d
-from functions.chatunivi_func import load_lvlm, lvlm_test, make_instruction
+from functions.llavapp_func import load_lvlm, lvlm_test, make_instruction
 from transformers import logging
 logging.set_verbosity_error()
 
@@ -23,7 +23,7 @@ def main():
     parser.add_argument('--clip_length', default=None, type=int)
     parser.add_argument('--template_adaption', default=False, type=str2bool, nargs='?', const=True)
     parser.add_argument('--class_adaption', default=False, type=str2bool, nargs='?', const=True)
-    parser.add_argument('--model_path', default='LVLM/weights/chatunivi', type=str)
+    parser.add_argument('--model_path', default='LLaVA-pp/LLaVA-Meta-Llama-3-8B-Instruct-FT', type=str)
 
     args = parser.parse_args()
     cfg = update_config(args)
@@ -57,7 +57,7 @@ def main():
     # anomaly detection
     if cfg.anomaly_detect:
         # load lvlm
-        tokenizer, model, image_processor = load_lvlm(cfg.model_path)
+        tokenizer, model, image_processor, context_len = load_lvlm(cfg.model_path)
 
         # processing videos
         dict_arr = []

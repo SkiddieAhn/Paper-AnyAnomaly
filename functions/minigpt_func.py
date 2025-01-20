@@ -1,8 +1,15 @@
 import torch
 import os
 import sys
+sys.path.append(os.path.join('MiniGPT-4'))
 from PIL import Image
-from transformers import AutoModel, AutoTokenizer
+from tqdm import tqdm
+import torch
+import numpy as np
+
+from minigpt4.common.eval_utils import prepare_texts, init_model, eval_parser
+from minigpt4.conversation.conversation import CONV_VISION_minigptv2, CONV_VISION_Vicuna0
+from minigpt4.common.config import Config
         
 
 def make_instruction(prompt_type, keyword, temporal_context=False):
@@ -41,33 +48,26 @@ def make_instruction(prompt_type, keyword, temporal_context=False):
         return instruction, tc_instruction
     
 
-def load_lvlm(model_path, device):
-    if model_path == 'MiniCPM-V-2_6':
-        model = AutoModel.from_pretrained('openbmb/MiniCPM-V-2_6', trust_remote_code=True, attn_implementation='sdpa', torch_dtype=torch.bfloat16) # sdpa or flash_attention_2, no eager
-    elif 'int4' in model_path:
-        model = AutoModel.from_pretrained(f'openbmb/{model_path}', trust_remote_code=True)
-    else:
-        model = AutoModel.from_pretrained(f'openbmb/{model_path}', trust_remote_code=True, torch_dtype=torch.float16)
-    
-    tokenizer = AutoTokenizer.from_pretrained(f'openbmb/{model_path}', trust_remote_code=True)
-    model = model.to(device=device).eval()
-    return tokenizer, model
+def load_lvlm(cfg):
+    parser = eval_parser()
+    args = parser.parse_args(["--cfg-path", cfg.model_path])
+    model, vis_processor = init_model(args)
+    model.eval()
+    return model, vis_processor
 
 
-def lvlm_test(tokenizer, model, qs, image_path, image=None):
+def lvlm_test(model, vis_processor, qs, image_path, image=None):
     if image is None:
         image = Image.open(image_path)
     
     image = image.convert('RGB')
+    image = vis_processor(image)
     
-    msgs = [{'role': 'user', 'content': qs}]
+    conv_temp = CONV_VISION_Vicuna0.copy()
+    conv_temp.system = "Give the following image: <Img>ImageContent</Img>. You will be able to see the image once I provide it to you. Please answer my questions."
     
-    answer = model.chat(
-        image=image,
-        msgs=msgs,
-        tokenizer = tokenizer,
-        sampling=False,
-        temperature=0.7,
-    )
+    text = prepare_texts([qs], conv_temp)
+    
+    answer = model.generate(torch.from_numpy(np.expand_dims(image,axis=0)), text, max_new_tokens=512, do_sample=False)
     
     return answer

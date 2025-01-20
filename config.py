@@ -31,6 +31,7 @@ def update_config(args=None):
     share_config['calc_video_auc'] = args.calc_video_auc
     share_config['class_adaption'] = args.class_adaption
     share_config['template_adaption'] = args.template_adaption
+    share_config['model_path'] = args.model_path
 
     if args.clip_length != None:
         share_config['clip_length'] = args.clip_length

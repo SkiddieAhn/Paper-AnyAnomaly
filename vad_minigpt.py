@@ -6,7 +6,7 @@ import argparse
 from fastprogress import progress_bar
 from sklearn import metrics
 from scipy.ndimage import gaussian_filter1d
-from functions.chatunivi_func import load_lvlm, lvlm_test, make_instruction
+from functions.MiniCPM_func import load_lvlm, lvlm_test, make_instruction
 from transformers import logging
 logging.set_verbosity_error()
 
@@ -20,14 +20,15 @@ def main():
     parser.add_argument('--anomaly_detect', default=True, type=str2bool, nargs='?', const=True)
     parser.add_argument('--calc_auc', default=True, type=str2bool, nargs='?', const=True)
     parser.add_argument('--calc_video_auc', default=False, type=str2bool, nargs='?', const=True)
-    parser.add_argument('--clip_length', default=None, type=int)
+    parser.add_argument('--clip_length', default=16, type=int)
     parser.add_argument('--template_adaption', default=False, type=str2bool, nargs='?', const=True)
     parser.add_argument('--class_adaption', default=False, type=str2bool, nargs='?', const=True)
-    parser.add_argument('--model_path', default='LVLM/weights/chatunivi', type=str)
+    parser.add_argument('--model_path', default='MiniCPM-Llama3-V-2_5', type=str)
 
     args = parser.parse_args()
     cfg = update_config(args)
     cfg.print_cfg()
+
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu") 
     print(device)
@@ -57,7 +58,7 @@ def main():
     # anomaly detection
     if cfg.anomaly_detect:
         # load lvlm
-        tokenizer, model, image_processor = load_lvlm(cfg.model_path)
+        model, vis_processor = load_lvlm(cfg)
 
         # processing videos
         dict_arr = []
@@ -77,7 +78,7 @@ def main():
                     for keyword in keyword_list:
                         instruction = make_instruction(cfg.prompt_type, keyword)
                         print_check = print_prompt(print_check, instruction)
-                        response = lvlm_test(tokenizer, model, image_processor, instruction, fr)
+                        response = lvlm_test(model, vis_processor, instruction, fr)
                         score = generate_output(response)['score']
                         max_score = max(max_score, score)
                     predicted.append(max_score)
