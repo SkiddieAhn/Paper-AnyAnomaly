@@ -1,7 +1,7 @@
 import torch
 import os
 import sys
-sys.path.append(os.path.join('LVLM'))
+sys.path.append(os.path.join('Chat-UniVi'))
 from ChatUniVi.constants import *
 from ChatUniVi.conversation import conv_templates, SeparatorStyle
 from ChatUniVi.model.builder import load_pretrained_model

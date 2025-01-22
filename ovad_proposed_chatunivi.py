@@ -7,7 +7,7 @@ from fastprogress import progress_bar
 from sklearn import metrics
 from scipy.ndimage import gaussian_filter1d
 from functions.text_func import make_text_embedding
-from functions.lvlm_func import load_lvlm, lvlm_test, make_instruction
+from functions.chatunivi_func import load_lvlm, lvlm_test, make_instruction
 from functions.attn_func import winclip_attention
 from functions.grid_func import grid_generation
 from functions.key_func import KFS
