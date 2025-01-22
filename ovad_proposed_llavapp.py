@@ -46,7 +46,7 @@ def main():
     video_names, video_paths = ovad_load_names_paths(cfg)
 
     # configure file
-    predict_file_name = f'results/{cfg.dataset_name}/ovad_{cfg.dataset_name}_{cfg.prompt_type}.json'
+    predict_file_name = f'results/{cfg.dataset_name}/llavapp_ovad_{cfg.dataset_name}_{cfg.prompt_type}.json'
 
     # load keyword list
     keyword_list = cfg.type_list
@@ -207,7 +207,7 @@ def main():
         print('org auc:', best_auc)
         print('-----------------------------------')
         anomalies_idx = [i for i,l in enumerate(labels) if l==1] 
-        graph_path = f'results/{cfg.dataset_name}/{cfg.type}/{cfg.prompt_type}/ovad_org_{cfg.dataset_name}_{cfg.type}_{cfg.prompt_type}.jpg'
+        graph_path = f'results/{cfg.dataset_name}/{cfg.type}/{cfg.prompt_type}/llavapp_ovad_org_{cfg.dataset_name}_{cfg.type}_{cfg.prompt_type}.jpg'
         save_score_auc_graph(anomalies_idx, org_best_predicted, org_best_auc, graph_path)
 
 
@@ -251,7 +251,7 @@ def main():
         print(f'best alpha: ({best_alpha})*original+({best_beta})*wa+({best_gamma})*tc')
         print('-----------------------------------')
         anomalies_idx = [i for i,l in enumerate(labels) if l==1] 
-        graph_path = f'results/{cfg.dataset_name}/{cfg.type}/{cfg.prompt_type}/ovad_combi_{cfg.dataset_name}_{cfg.type}_{cfg.prompt_type}.jpg'
+        graph_path = f'results/{cfg.dataset_name}/{cfg.type}/{cfg.prompt_type}/llavapp_ovad_combi_{cfg.dataset_name}_{cfg.type}_{cfg.prompt_type}.jpg'
         save_score_auc_graph(anomalies_idx, combi_best_predicted, combi_best_auc, graph_path)
 
 
@@ -273,7 +273,7 @@ def main():
 
             video_pd = combi_best_predicted[len_past:len_past+len_present]
             video_anomalies_idx = [j for j,l in enumerate(video_gt) if l==1] 
-            graph_path = f'results/{cfg.dataset_name}/{cfg.type}/{cfg.prompt_type}/videos/ovad_combi_{cfg.dataset_name}_{video_name}_{cfg.type}_{cfg.prompt_type}.jpg'
+            graph_path = f'results/{cfg.dataset_name}/{cfg.type}/{cfg.prompt_type}/videos/llavapp_ovad_combi_{cfg.dataset_name}_{video_name}_{cfg.type}_{cfg.prompt_type}.jpg'
             save_score_graph(video_anomalies_idx, video_pd, graph_path)
 
 

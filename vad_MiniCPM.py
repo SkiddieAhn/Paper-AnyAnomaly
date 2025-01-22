@@ -42,7 +42,7 @@ def main():
     video_names, video_paths = load_names_paths(cfg)
 
     # configure file
-    predict_file_name = f'results/{cfg.dataset_name}/{cfg.type}/{cfg.prompt_type}/{cfg.dataset_name}_{cfg.type}_{cfg.prompt_type}.json'
+    predict_file_name = f'results/{cfg.dataset_name}/{cfg.type}/{cfg.prompt_type}/minicpm_{cfg.dataset_name}_{cfg.type}_{cfg.prompt_type}.json'
 
     # load keyword list
     keyword_list = load_keyword_list(cfg)
@@ -140,7 +140,7 @@ def main():
 
         print('total auc:', best_auc)
         anomalies_idx = [i for i,l in enumerate(gt) if l==1] 
-        graph_path = f'results/{cfg.dataset_name}/{cfg.type}/{cfg.prompt_type}/{cfg.dataset_name}_{cfg.type}_{cfg.prompt_type}.jpg'
+        graph_path = f'results/{cfg.dataset_name}/{cfg.type}/{cfg.prompt_type}/minicpm_{cfg.dataset_name}_{cfg.type}_{cfg.prompt_type}.jpg'
         save_score_auc_graph(anomalies_idx, best_predicted, best_auc, graph_path)
 
 
@@ -163,7 +163,7 @@ def main():
             video_pd = best_predicted[len_past:len_past+len_present]
             video_pd2 = min_max_normalize(video_pd)
             video_anomalies_idx = [j for j,l in enumerate(video_gt) if l==1] 
-            graph_path = f'results/{cfg.dataset_name}/{cfg.type}/{cfg.prompt_type}/videos/{cfg.dataset_name}_{video_name}_{cfg.type}_{cfg.prompt_type}.jpg'
+            graph_path = f'results/{cfg.dataset_name}/{cfg.type}/{cfg.prompt_type}/videos/minicpm_{cfg.dataset_name}_{video_name}_{cfg.type}_{cfg.prompt_type}.jpg'
             save_score_graph(video_anomalies_idx, video_pd2, graph_path)
 
 
