@@ -63,16 +63,20 @@ def grid_image_generation(gpatches, idx):
     return grid_image
 
 
-def grid_generation(image_paths, keyword, clip_model, device):
-    gpatches_img = split_images_with_unfold(image_paths, kernel_size=(240, 240)) # 1x1
-    gpatches_lge = split_images_with_unfold(image_paths, kernel_size=(120, 120)) # 2x2
-    gpatches_mid = split_images_with_unfold(image_paths, kernel_size=(80, 80)) # 3x3
-    gpatches_sml = split_images_with_unfold(image_paths, kernel_size=(60, 60)) # 4x4
+def grid_generation(cfg, image_paths, keyword, clip_model, device):
+    gpatches = []
+        
+    if cfg.sml_scale:
+        gpatches_sml = split_images_with_unfold(image_paths, kernel_size=cfg.sml_size, stride_size=cfg.sml_size_stride) 
+        gpatches += [gpatch for gpatch in gpatches_sml]
 
-    gpatches = [gpatch for gpatch in gpatches_img]
-    gpatches += [gpatch for gpatch in gpatches_lge]
-    gpatches += [gpatch for gpatch in gpatches_mid]
-    gpatches += [gpatch for gpatch in gpatches_sml]
+    if cfg.mid_scale:
+        gpatches_mid = split_images_with_unfold(image_paths, kernel_size=cfg.mid_size, stride_size=cfg.mid_size_stride) 
+        gpatches += [gpatch for gpatch in gpatches_mid]
+
+    if cfg.lge_scale:
+        gpatches_lge = split_images_with_unfold(image_paths, kernel_size=cfg.lge_size, stride_size=cfg.lge_size_stride) 
+        gpatches += [gpatch for gpatch in gpatches_lge]
 
     max_patch_idx = patch_selection(gpatches, keyword, clip_model, device)
     grid_image = grid_image_generation(gpatches, max_patch_idx)

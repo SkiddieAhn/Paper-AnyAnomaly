@@ -52,20 +52,33 @@ def attention(img_path, sim):
     return attn
 
 
-def winclip_attention(img_path, text_embedding, clip_model, device, class_adaption=False, type_id=None):
-    patches_img = split_one_image_with_unfold(img_path, kernel_size=(240, 240)) # 1x1
-    patches_lge = split_one_image_with_unfold(img_path, kernel_size=(80, 80)) # 3x3
-    patches_mid = split_one_image_with_unfold(img_path, kernel_size=(48, 48)) # 5x5
+def total_fusion(data1, data2, data3):
+    inputs = [data1, data2, data3]
+    valid_data = [x for x in inputs if x is not None]
+    avg_data = sum(valid_data) / len(valid_data)
+    out_data = avg_data.squeeze(0).numpy()
+    return out_data
 
-    sim_img = patch_similarity(patches_img, text_embedding, clip_model, device, class_adaption, type_id).view(1, 1, 1, 1)
-    sim_lge = patch_similarity(patches_lge, text_embedding, clip_model, device, class_adaption, type_id).view(1, 1, 3, 3)
-    sim_mid = patch_similarity(patches_mid, text_embedding, clip_model, device, class_adaption, type_id).view(1, 1, 5, 5)
 
-    usim_img = F.interpolate(sim_img, size=(224, 224), mode='bilinear').squeeze(0)
-    usim_lge = F.interpolate(sim_lge, size=(224, 224), mode='bilinear').squeeze(0)
-    usim_mid = F.interpolate(sim_mid, size=(224, 224), mode='bilinear').squeeze(0)
-    usim_total = ((usim_img + usim_lge + usim_mid) / 3).squeeze(0).numpy()
-    
+def winclip_attention(cfg, img_path, text_embedding, clip_model, device, class_adaption=False, type_id=None):
+    usim_sml = usim_mid = usim_lge = None
+
+    if cfg.sml_scale:
+        patches_sml = split_one_image_with_unfold(img_path, kernel_size=cfg.sml_size, stride_size=cfg.sml_size_stride) 
+        sim_sml = patch_similarity(patches_sml, text_embedding, clip_model, device, class_adaption, type_id).view(1, 1, cfg.sml_patch_num[0], cfg.sml_patch_num[1])
+        usim_sml = F.interpolate(sim_sml, size=(224, 224), mode='bilinear').squeeze(0)
+
+    if cfg.mid_scale:
+        patches_mid = split_one_image_with_unfold(img_path, kernel_size=cfg.mid_size, stride_size=cfg.mid_size_stride) 
+        sim_mid = patch_similarity(patches_mid, text_embedding, clip_model, device, class_adaption, type_id).view(1, 1, cfg.mid_patch_num[0], cfg.mid_patch_num[1])
+        usim_mid = F.interpolate(sim_mid, size=(224, 224), mode='bilinear').squeeze(0)
+
+    if cfg.lge_scale:
+        patches_lge = split_one_image_with_unfold(img_path, kernel_size=cfg.lge_size, stride_size=cfg.lge_size_stride) 
+        sim_lge = patch_similarity(patches_lge, text_embedding, clip_model, device, class_adaption, type_id).view(1, 1, cfg.lge_patch_num[0], cfg.lge_patch_num[1])
+        usim_lge = F.interpolate(sim_lge, size=(224, 224), mode='bilinear').squeeze(0)
+
+    usim_total = total_fusion(usim_sml, usim_mid, usim_lge)    
     attentioned = attention(img_path, usim_total)
     output_image = transform2pil(attentioned, False)
     return output_image
