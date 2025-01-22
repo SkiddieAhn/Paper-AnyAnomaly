@@ -12,11 +12,7 @@ AnyAnomaly: A Zero-shot Approach for Customizable Video Anomaly Detection using 
 
 ## After setting the enviroments, Install this packages
 ```bash
-pip install h5py
-pip install fastprogress
-pip install scikit-learn
-pip install openai-clip
-pip install opencv-python==4.10.0.84
+pip install -r requirements.txt
 ```
 
 ## Requirements and Installation For ChatUniVi
