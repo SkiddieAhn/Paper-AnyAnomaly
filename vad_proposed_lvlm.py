@@ -7,7 +7,7 @@ from fastprogress import progress_bar
 from sklearn import metrics
 from scipy.ndimage import gaussian_filter1d
 from functions.text_func import make_text_embedding
-from functions.llavapp_func import load_lvlm, lvlm_test, make_instruction
+from functions.lvlm_func import load_lvlm, lvlm_test, make_instruction
 from functions.attn_func import winclip_attention
 from functions.grid_func import grid_generation
 from functions.key_func import KFS
@@ -21,19 +21,19 @@ def main():
     parser.add_argument('--dataset', default='avenue', type=str)
     parser.add_argument('--type', default='bicycle', type=str)
     parser.add_argument('--multiple', default=False, type=str2bool, nargs='?', const=True)
-    parser.add_argument('--prompt_type', default=3, type=int, help='0: simple, 1: complex')
+    parser.add_argument('--prompt_type', default=3, type=int, help='0: simple, 1: consideration, 2: reasoning, 3: reasoning+consideration')
     parser.add_argument('--anomaly_detect', default=True, type=str2bool, nargs='?', const=True)
     parser.add_argument('--calc_auc', default=True, type=str2bool, nargs='?', const=True)
     parser.add_argument('--calc_video_auc', default=False, type=str2bool, nargs='?', const=True)
     parser.add_argument('--clip_length', default=24, type=int)
-    parser.add_argument('--template_adaption', default=False, type=str2bool, nargs='?', const=True)
-    parser.add_argument('--class_adaption', default=False, type=str2bool, nargs='?', const=True)
+    parser.add_argument('--template_adaption', default=True, type=str2bool, nargs='?', const=True)
+    parser.add_argument('--class_adaption', default=True, type=str2bool, nargs='?', const=True)
     parser.add_argument('--kfs_num', default=4, type=int, help='1: random, 2: clip, 3: grouping->clip, 4: clip->grouping')
     parser.add_argument('--lge_scale', default=True, type=str2bool, nargs='?', const=True)
     parser.add_argument('--mid_scale', default=True, type=str2bool, nargs='?', const=True)
     parser.add_argument('--sml_scale', default=True, type=str2bool, nargs='?', const=True)
     parser.add_argument('--stride', default=False, type=str2bool, nargs='?', const=True)
-    parser.add_argument('--model_path', default='LLaVA-pp/LLaVA/LLaVA-Meta-Llama-3-8B-Instruct-FT', type=str)
+    parser.add_argument('--model_path', default=None, type=str)
 
     args = parser.parse_args()
     cfg = update_config(args)
@@ -67,7 +67,7 @@ def main():
     # anomaly detection
     if cfg.anomaly_detect:
         # load lvlm
-        tokenizer, model, image_processor, _ = load_lvlm(cfg.model_path)
+        tokenizer, model, image_processor = load_lvlm(cfg.model_path)
 
         # load clip model
         clip_model, preprocess = clip.load('ViT-B/32', device=device)
@@ -123,7 +123,7 @@ def main():
 
                         max_score = max(max_score, score)
                         max_score_wa = max(max_score_wa, score_wa)
-                        max_score_tc = max(max_score_tc, score_tc)                  
+                        max_score_tc = max(max_score_tc, score_tc)
 
                     # save frame scores
                     for _ in range(cfg.clip_length):

@@ -62,3 +62,21 @@ class label_loader:
                 gt.append(np.array(f[key]))
         return gt
     
+
+class ovad_label_loader:
+    def __init__(self, data_root, dataset_name):
+        self.fpath = data_root + f'/{dataset_name}_label.h5'
+
+    def infor(self):
+        with h5py.File(self.fpath, 'r') as f:
+            print('len(f.keys()):', len(f.keys()))
+            for key in f:
+                value = np.array(f[key])
+                print(f'{key} count (0/1):', np.count_nonzero(value == 0), np.count_nonzero(value == 1))
+
+    def load(self):
+        gt = []
+        with h5py.File(self.fpath, 'r') as f:
+            for key in f:
+                gt.append(np.array(f[key]))
+        return gt
