@@ -12,24 +12,43 @@ from minigpt4.conversation.conversation import CONV_VISION_minigptv2, CONV_VISIO
 from minigpt4.common.config import Config
         
 
-def make_instruction(prompt_type, keyword, temporal_context=False):
+def make_instruction(cfg, keyword, temporal_context=False):
     # simple
-    if prompt_type == 0:
+    if cfg.prompt_type == 0:
         instruction = (
             f"- **Task**: Evaluate whether the given image includes **{keyword}** on a scale from 0 to 1. "
             f"A score of 1 means **{keyword}** is clearly present in the image, while a score of 0 means **{keyword}** is not present at all. "
             f"For intermediate cases, assign a value between 0 and 1 based on the degree to which **{keyword}** is visible.\n"
-            f"- **Response**: Provide the score as a float, rounded to one decimal place, including a brief reason for the score in **one short sentence**."
+            f"- **{cfg.out_prompt}**: Provide the score as a float, rounded to one decimal place, **without any additional text or explanation**."
         )
 
     # complex (+ consideration)
-    elif prompt_type == 1:
+    elif cfg.prompt_type == 1:
         instruction = (
             f"- **Task**: Evaluate whether the given image includes **{keyword}** on a scale from 0 to 1. "
             f"A score of 1 means **{keyword}** is clearly present in the image, while a score of 0 means **{keyword}** is not present at all. "
             f"For intermediate cases, assign a value between 0 and 1 based on the degree to which **{keyword}** is visible.\n"
             f"- **Consideration**: The key is whether **{keyword}** is present in the image, not its focus. Thus, if **{keyword}** is present, even if it is not the main focus, assign a higher score like 1.0.\n"
-            f"- **Response**: Provide the score as a float, rounded to one decimal place, including a brief reason for the score in **one short sentence**."
+            f"- **{cfg.out_prompt}**: Provide the score as a float, rounded to one decimal place, **without any additional text or explanation**."
+        )
+
+    # complex (+ reasoning)
+    elif cfg.prompt_type == 2:
+        instruction = (
+            f"- **Task**: Evaluate whether the given image includes **{keyword}** on a scale from 0 to 1. "
+            f"A score of 1 means **{keyword}** is clearly present in the image, while a score of 0 means **{keyword}** is not present at all. "
+            f"For intermediate cases, assign a value between 0 and 1 based on the degree to which **{keyword}** is visible.\n"
+            f"- **{cfg.out_prompt}**: Provide the score as a float, rounded to one decimal place, including a brief reason for the score in **one short sentence**."
+        )
+
+    # complex (+ reasoning, consideration)
+    elif cfg.prompt_type == 3:
+        instruction = (
+            f"- **Task**: Evaluate whether the given image includes **{keyword}** on a scale from 0 to 1. "
+            f"A score of 1 means **{keyword}** is clearly present in the image, while a score of 0 means **{keyword}** is not present at all. "
+            f"For intermediate cases, assign a value between 0 and 1 based on the degree to which **{keyword}** is visible.\n"
+            f"- **Consideration**: The key is whether **{keyword}** is present in the image, not its focus. Thus, if **{keyword}** is present, even if it is not the main focus, assign a higher score like 1.0.\n"
+            f"- **{cfg.out_prompt}**: Provide the score as a float, rounded to one decimal place, including a brief reason for the score in **one short sentence**."
         )
     
     if temporal_context == False:
@@ -37,14 +56,48 @@ def make_instruction(prompt_type, keyword, temporal_context=False):
     
     # insturction for temporal context
     else:
-        tc_instruction = (
-            f"- **Task**: Evaluate whether the given image includes **{keyword}** on a scale from 0 to 1."
-            f"A score of 1 means **{keyword}** is clearly present in the image, while a score of 0 means **{keyword}** is not present at all. "
-            f"For intermediate cases, assign a value between 0 and 1 based on the degree to which **{keyword}** is visible.\n"
-            f"- **Context**: The given image represents a sequence (row 1 column 1 → row 1 column 2 → row 2 column 1 -> row 2 column 2) illustrating temporal progression.\n" 
-            f"- **Consideration**: The key is whether **{keyword}** is present in the image, not its focus. Thus, if **{keyword}** is present, even if it is not the main focus, assign a higher score like 1.0.\n"    
-            f"- **Response**: Provide the score as a float, rounded to one decimal place, including a brief reason for the score in **one short sentence**."
-        )
+        # simple
+        if cfg.prompt_type == 0:
+            tc_instruction = (
+                f"- **Task**: Evaluate whether the given image includes **{keyword}** on a scale from 0 to 1."
+                f"A score of 1 means **{keyword}** is clearly present in the image, while a score of 0 means **{keyword}** is not present at all. "
+                f"For intermediate cases, assign a value between 0 and 1 based on the degree to which **{keyword}** is visible.\n"
+                f"- **Context**: The given image represents a sequence (row 1 column 1 → row 1 column 2 → row 2 column 1 -> row 2 column 2) illustrating temporal progression.\n" 
+                f"- **{cfg.out_prompt}**: Provide the score as a float, rounded to one decimal place, **without any additional text or explanation**."
+            )
+
+        # complex (+ consideration)
+        elif cfg.prompt_type == 1:
+            tc_instruction = (
+                f"- **Task**: Evaluate whether the given image includes **{keyword}** on a scale from 0 to 1."
+                f"A score of 1 means **{keyword}** is clearly present in the image, while a score of 0 means **{keyword}** is not present at all. "
+                f"For intermediate cases, assign a value between 0 and 1 based on the degree to which **{keyword}** is visible.\n"
+                f"- **Context**: The given image represents a sequence (row 1 column 1 → row 1 column 2 → row 2 column 1 -> row 2 column 2) illustrating temporal progression.\n" 
+                f"- **Consideration**: The key is whether **{keyword}** is present in the image, not its focus. Thus, if **{keyword}** is present, even if it is not the main focus, assign a higher score like 1.0.\n"
+                f"- **{cfg.out_prompt}**: Provide the score as a float, rounded to one decimal place, **without any additional text or explanation**."
+            )
+
+        # complex (+ reasoning)
+        elif cfg.prompt_type == 2:
+            tc_instruction = (
+                f"- **Task**: Evaluate whether the given image includes **{keyword}** on a scale from 0 to 1."
+                f"A score of 1 means **{keyword}** is clearly present in the image, while a score of 0 means **{keyword}** is not present at all. "
+                f"For intermediate cases, assign a value between 0 and 1 based on the degree to which **{keyword}** is visible.\n"
+                f"- **Context**: The given image represents a sequence (row 1 column 1 → row 1 column 2 → row 2 column 1 -> row 2 column 2) illustrating temporal progression.\n" 
+                f"- **{cfg.out_prompt}**: Provide the score as a float, rounded to one decimal place, including a brief reason for the score in **one short sentence**."
+            )
+
+        # complex (+ reasoning, consideration)
+        elif cfg.prompt_type == 3:
+            tc_instruction = (
+                f"- **Task**: Evaluate whether the given image includes **{keyword}** on a scale from 0 to 1."
+                f"A score of 1 means **{keyword}** is clearly present in the image, while a score of 0 means **{keyword}** is not present at all. "
+                f"For intermediate cases, assign a value between 0 and 1 based on the degree to which **{keyword}** is visible.\n"
+                f"- **Context**: The given image represents a sequence (row 1 column 1 → row 1 column 2 → row 2 column 1 -> row 2 column 2) illustrating temporal progression.\n" 
+                f"- **Consideration**: The key is whether **{keyword}** is present in the image, not its focus. Thus, if **{keyword}** is present, even if it is not the main focus, assign a higher score like 1.0.\n"    
+                f"- **{cfg.out_prompt}**: Provide the score as a float, rounded to one decimal place, including a brief reason for the score in **one short sentence**."
+            )
+
         return instruction, tc_instruction
     
 

@@ -10,7 +10,7 @@ from functions.text_func import make_text_embedding
 from functions.minigpt_func import load_lvlm, lvlm_test, make_instruction
 from functions.attn_func import winclip_attention
 from functions.grid_func import grid_generation
-from functions.key_func import key_frame_selection_four_idx
+from functions.key_func import KFS
 import clip
 from transformers import logging
 logging.set_verbosity_error()
@@ -21,14 +21,19 @@ def main():
     parser.add_argument('--dataset', default='avenue', type=str)
     parser.add_argument('--type', default='bicycle', type=str)
     parser.add_argument('--multiple', default=False, type=str2bool, nargs='?', const=True)
-    parser.add_argument('--prompt_type', default=1, type=int, help='0: simple, 1: complex')
+    parser.add_argument('--prompt_type', default=3, type=int, help='0: simple, 1: consideration, 2: reasoning, 3: reasoning+consideration')
     parser.add_argument('--anomaly_detect', default=True, type=str2bool, nargs='?', const=True)
     parser.add_argument('--calc_auc', default=True, type=str2bool, nargs='?', const=True)
     parser.add_argument('--calc_video_auc', default=False, type=str2bool, nargs='?', const=True)
-    parser.add_argument('--clip_length', default=16, type=int)
-    parser.add_argument('--template_adaption', default=False, type=str2bool, nargs='?', const=True)
-    parser.add_argument('--class_adaption', default=False, type=str2bool, nargs='?', const=True)
-    parser.add_argument("--model_path", required=True, default="MiniGPT-4/eval_configs/minigpt4_llama2_eval.yaml", help="path to configuration file.")
+    parser.add_argument('--clip_length', default=24, type=int)
+    parser.add_argument('--template_adaption', default=True, type=str2bool, nargs='?', const=True)
+    parser.add_argument('--class_adaption', default=True, type=str2bool, nargs='?', const=True)
+    parser.add_argument('--kfs_num', default=4, type=int, help='1: random, 2: clip, 3: grouping->clip, 4: clip->grouping')
+    parser.add_argument('--lge_scale', default=True, type=str2bool, nargs='?', const=True)
+    parser.add_argument('--mid_scale', default=True, type=str2bool, nargs='?', const=True)
+    parser.add_argument('--sml_scale', default=True, type=str2bool, nargs='?', const=True)
+    parser.add_argument('--stride', default=False, type=str2bool, nargs='?', const=True)
+    parser.add_argument("--model_path", default="MiniGPT-4/eval_configs/minigpt4_llama2_eval.yaml", help="path to configuration file.", type=str)
 
     args = parser.parse_args()
     cfg = update_config(args)
@@ -67,6 +72,9 @@ def main():
         # load clip model
         clip_model, preprocess = clip.load('ViT-B/32', device=device)
 
+        # key frame selection method
+        kfs = KFS(cfg.kfs_num, cfg.clip_length, clip_model, preprocess, device)
+
         # processing videos
         dict_arr = []
         print_check = True
@@ -87,8 +95,8 @@ def main():
                     max_score_tc = 0 
 
                     # multiple keyword processing 
-                    for keyword in keyword_list:
-                        instruction, instruction_tc = make_instruction(cfg.prompt_type, keyword, True)
+                    for k_i, keyword in enumerate(keyword_list):
+                        instruction, instruction_tc = make_instruction(cfg, keyword, True)
                         print_check = print_prompt(print_check, instruction, instruction_tc)
 
                         # text embedding
@@ -96,13 +104,13 @@ def main():
                                                               class_adaption=cfg.class_adaption, template_adaption=cfg.template_adaption)
 
                         # key frame selection
-                        indice = key_frame_selection_four_idx(cfg.clip_length, cp, keyword, clip_model, preprocess, device)
+                        indice = kfs.call_function(cp, keyword)
                         key_image_path = cp[indice[0]]
-                        image_paths = [cp[idx] for idx in indice[1:]]          
+                        image_paths = [cp[idx] for idx in indice[1:]]      
 
                         # position & temporal context 
-                        wa_image = winclip_attention(key_image_path, text_embedding, clip_model, device, cfg.class_adaption, cfg.type_id)
-                        grid_image = grid_generation(image_paths, keyword, clip_model, device)
+                        wa_image = winclip_attention(cfg, key_image_path, text_embedding, clip_model, device, cfg.class_adaption, cfg.type_ids[k_i])
+                        grid_image = grid_generation(cfg, image_paths, keyword, clip_model, device)
 
                         # anomaly detection 
                         response = lvlm_test(model, vis_processor, instruction, key_image_path, None)

@@ -1,11 +1,23 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import json
+import random
+import torch
 import os
 import argparse
 import re
 import textwrap
 from PIL import Image
+
+
+def set_seed(seed: int):
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
 
 
 def print_long_string(long_string, width=70):
@@ -88,7 +100,7 @@ def save_two_graph(answers_idx, scores1, scores2, auc1, auc2, file_path, x='Fram
     plt.figure(figsize=(10, 5))
     plt.plot([num for num in range(length)],[score for score in scores1], label=f'Baseline: AUC={auc1:.3f}%', color='black') # plotting
     plt.plot([num for num in range(length)],[score for score in scores2], label=f'Proposed: AUC={auc2:.3f}%', color='blue') # plotting
-    plt.bar(answers_idx, max(scores1), width=1, color='r',alpha=0.5, label='Ground-truth') # check answer
+    plt.bar(answers_idx, max(scores1), width=1, color='#BBCBE7',alpha=0.5, label='Ground-truth') # check answer
     plt.xlabel(x, fontsize=12)
     plt.ylabel(y, fontsize=12)
     plt.legend(fontsize=12)
@@ -101,7 +113,7 @@ def save_score_auc_graph(answers_idx, scores, auc, file_path, x='Frame', y='Anom
     plt.figure(figsize=(10, 5))
     plt.ylim([0.0, 1.0])
     plt.plot([num for num in range(length)],[score for score in scores], label=f'Predicted: AUC={auc:.3f}') # plotting
-    plt.bar(answers_idx, max(scores), width=1, color='r',alpha=0.5, label='Ground-truth') # check answer
+    plt.bar(answers_idx, max(scores), width=1, color='#BBCBE7',alpha=0.5, label='Ground-truth') # check answer
     plt.xlabel(x, fontsize=14)
     plt.ylabel(y, fontsize=14)
     plt.legend(fontsize=14)
@@ -113,7 +125,7 @@ def save_score_graph(answers_idx, scores, file_path, x='Frame', y='Anomaly Score
     plt.clf()
     plt.figure(figsize=(10, 5))
     plt.plot([num for num in range(length)],[score for score in scores]) # plotting
-    plt.bar(answers_idx, 1.0, width=1, color='r',alpha=0.5) # check answer
+    plt.bar(answers_idx, 1.0, width=1, color='#BBCBE7',alpha=0.5) # check answer
     plt.xlabel(x)
     plt.ylabel(y)
     plt.ylim(0, 1)
@@ -136,6 +148,13 @@ def load_names_paths(cfg):
         video_names = [name for name in video_names if not name in except_arr]
         video_paths = [os.path.join(cfg.test_data_path, name) for name in video_names if not name in except_arr]
 
+    return video_names, video_paths
+
+
+def ovad_load_names_paths(cfg):
+    video_names = os.listdir(cfg.test_data_path)
+    video_names.sort()
+    video_paths = [os.path.join(cfg.test_data_path, name) for name in video_names]
     return video_names, video_paths
 
 

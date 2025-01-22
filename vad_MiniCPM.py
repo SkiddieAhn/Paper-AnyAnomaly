@@ -16,13 +16,18 @@ def main():
     parser.add_argument('--dataset', default='avenue', type=str)
     parser.add_argument('--type', default='bicycle', type=str)
     parser.add_argument('--multiple', default=False, type=str2bool, nargs='?', const=True)
-    parser.add_argument('--prompt_type', default=1, type=int, help='0: simple, 1: complex')
+    parser.add_argument('--prompt_type', default=3, type=int, help='0: simple, 1: consideration, 2: reasoning, 3: reasoning+consideration')
     parser.add_argument('--anomaly_detect', default=True, type=str2bool, nargs='?', const=True)
     parser.add_argument('--calc_auc', default=True, type=str2bool, nargs='?', const=True)
     parser.add_argument('--calc_video_auc', default=False, type=str2bool, nargs='?', const=True)
-    parser.add_argument('--clip_length', default=16, type=int)
+    parser.add_argument('--clip_length', default=None, type=int)
     parser.add_argument('--template_adaption', default=False, type=str2bool, nargs='?', const=True)
     parser.add_argument('--class_adaption', default=False, type=str2bool, nargs='?', const=True)
+    parser.add_argument('--kfs_num', default=0, type=int, help='1: random, 2: clip, 3: grouping->clip, 4: clip->grouping')
+    parser.add_argument('--lge_scale', default=False, type=str2bool, nargs='?', const=True)
+    parser.add_argument('--mid_scale', default=False, type=str2bool, nargs='?', const=True)
+    parser.add_argument('--sml_scale', default=False, type=str2bool, nargs='?', const=True)
+    parser.add_argument('--stride', default=False, type=str2bool, nargs='?', const=True)
     parser.add_argument('--model_path', default='MiniCPM-Llama3-V-2_5', type=str)
 
     args = parser.parse_args()
@@ -76,7 +81,7 @@ def main():
 
                     # multiple keyword processing 
                     for keyword in keyword_list:
-                        instruction = make_instruction(cfg.prompt_type, keyword)
+                        instruction = make_instruction(cfg, keyword)
                         print_check = print_prompt(print_check, instruction)
                         response = lvlm_test(tokenizer, model, instruction, fr)
                         score = generate_output(response)['score']
