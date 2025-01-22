@@ -18,7 +18,7 @@ pip install scikit-learn
 pip install openai-clip
 
 # for llava-pp
-pip install opencv-python
+pip install opencv-python==4.10.0.84
 ```
 
 ## Requirements and Installation For ChatUniVi
