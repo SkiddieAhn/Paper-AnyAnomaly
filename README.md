@@ -21,7 +21,7 @@ pip install openai-clip
 pip install opencv-python
 ```
 
-## Requirements and Installation For ChatUniVi
+## 1. Requirements and Installation For ChatUniVi
 - ```Chat-UniVi```: [[GitHub]](https://github.com/PKU-YuanGroup/Chat-UniVi)
 - Python >= 3.10
 - Install required packages:
@@ -44,7 +44,7 @@ python -u vad_chatunivi.py --dataset=shtech --type=falling
 python -u vad_proposed_chatunivi.py --dataset=shtech --type=falling 
 ```
 
-## Requirements and Installation For MiniCPM
+## 2. Requirements and Installation For MiniCPM
 - ```MiniCPM```: [[GitHub]](https://github.com/OpenBMB/MiniCPM-V.git)
 - Install required packages:
 ```bash
@@ -60,14 +60,14 @@ pip install -r requirements.txt
 - ```shtech type```: [car, bicycle, fighting, throwing, hand_truck, running, skateboarding, falling, jumping, loitering, motorcycle]
 - ```model path```: MiniCPM-V-2_6, MiniCPM-V-2_6-int4, MiniCPM-Llama3-V-2_5, MiniCPM-Llama3-V-2_5-int4, MiniCPM-V-2, MiniCPM-V
 ```Shell
-# Baseline model (Chat-UniVi)
+# Baseline model (MiniCPM)
 python -u vad_MiniCPM.py --dataset=shtech --type=falling --model_path=MiniCPM-Llama3-V-2_5
 # proposed model (AnyAomaly)
 python -u vad_proposed_MiniCPM.py --dataset=shtech --type=falling --model_path=MiniCPM-Llama3-V-2_5
 ```
 
 
-## Requirements and Installation For MiniGPT-4
+## 3. Requirements and Installation For MiniGPT-4
 - ```MiniGPT-4```: [[GitHub]](https://github.com/Vision-CAIR/MiniGPT-4.git)
 - Install required packages:
 ```bash
@@ -94,14 +94,14 @@ conda activate minigptv
 - ```shtech type```: [car, bicycle, fighting, throwing, hand_truck, running, skateboarding, falling, jumping, loitering, motorcycle]
 - ```model path```: minigpt4_llama2_eval.yaml, minigpt4_eval.yaml
 ```Shell
-# Baseline model (Chat-UniVi)
-python -u vad_MiniCPM.py --dataset=shtech --type=falling --model_path=MiniGPT-4/eval_configs/minigpt4_llama2_eval.yaml
+# Baseline model (MiniGPT-4)
+python -u vad_minigpt.py --dataset=shtech --type=falling --model_path=MiniGPT-4/eval_configs/minigpt4_llama2_eval.yaml
 # proposed model (AnyAomaly)
-python -u vad_proposed_MiniCPM.py --dataset=shtech --type=falling --model_path=MiniGPT-4/eval_configs/minigpt4_llama2_eval.yaml
+python -u vad_proposed_minigpt.py --dataset=shtech --type=falling --model_path=MiniGPT-4/eval_configs/minigpt4_llama2_eval.yaml
 ```
 
 
-## Requirements and Installation For LLaVA-pp
+## 4. Requirements and Installation For LLaVA-pp
 - ```LLaVA-pp```: [[GitHub]](https://github.com/mbzuai-oryx/LLaVA-pp)
 - Install required packages:
 ```bash
@@ -133,8 +133,8 @@ git clone https://huggingface.co/MBZUAI/LLaVA-Meta-Llama-3-8B-Instruct-FT
 - ```shtech type```: [car, bicycle, fighting, throwing, hand_truck, running, skateboarding, falling, jumping, loitering, motorcycle]
 - ```model path```: LLaVA-Meta-Llama-3-8B-Instruct-FT, ...
 ```Shell
-# Baseline model (Chat-UniVi)
-python -u vad_MiniCPM.py --dataset=shtech --type=falling --model_path=LLaVA-pp/LLaVA-Meta-Llama-3-8B-Instruct-FT
+# Baseline model (LLaVA-pp)
+python -u vad_llavapp.py --dataset=shtech --type=falling --model_path=LLaVA-pp/LLaVA-Meta-Llama-3-8B-Instruct-FT
 # proposed model (AnyAomaly)
-python -u vad_proposed_MiniCPM.py --dataset=shtech --type=falling --model_path=LLaVA-pp/LLaVA-Meta-Llama-3-8B-Instruct-FT
+python -u vad_proposed_llavapp.py --dataset=shtech --type=falling --model_path=LLaVA-pp/LLaVA-Meta-Llama-3-8B-Instruct-FT
 ```
