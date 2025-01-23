@@ -117,6 +117,7 @@ cp LLaMA-3-V/llava_llama.py LLaVA/llava/model/language_model/llava_llama.py
 
 # Create enviroments
 conda create -n llava
+conda activate llava
 cd LLaVA
 pip install --upgrade pip
 pip install -e .
