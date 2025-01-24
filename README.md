@@ -28,6 +28,10 @@ cd ../
 pip install -r requirements.txt
 ```
 
+## Preparing LVLM checkpoints
+- weights: Chat-UniVi 7B [[Huggingface]](https://huggingface.co/Chat-UniVi/Chat-UniVi/tree/main), Chat-UniVi 13B [[Huggingface]](https://huggingface.co/Chat-UniVi/Chat-UniVi-13B/tree/main)
+- Download all files using the link above and move them to the ```Chat-UniVi/weights/chatunivi directory```.
+
 ## Command
 - ```avenue type```: [too_close, bicycle, throwing, running, dancing]
 - ```shtech type```: [car, bicycle, fighting, throwing, hand_truck, running, skateboarding, falling, jumping, loitering, motorcycle]
@@ -83,7 +87,7 @@ cd ../
 pip install -r requirements.txt
 ```
 
-## Following the MiniGPT github for prepare pretrained LLM weights and model checkpoints
+## Preparing LVLM checkpoints
 - ```MiniGPT-4```: [[GitHub]](https://github.com/Vision-CAIR/MiniGPT-4.git)
 - LLM weights: Llama 2 Chat 7B, Vicuna V0 13B, Vicuna V0 7B
 - Model checkpoints; MiniGPT-4 (Vicuna 13B), MiniGPT-4 (Vicuna 7B), MiniGPT-4 (LLaMA-2 Chat 7B)
