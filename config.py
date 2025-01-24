@@ -4,9 +4,9 @@ os.environ["HDF5_USE_FILE_LOCKING"] = "FALSE"
 if not os.path.exists('results'):
     os.mkdir('results')
 
-share_config = {'data_root': '/home/sha/datasets',
-                'cdata_root': '/home/sha/datasets/cvad_data',
-                'model_path': 'Chat-UniVi/weights/chatunivi'} 
+share_config = {'data_root': '/datasets/anomalyDataset/',
+                'cdata_root': 'ground_truth'
+               } 
 
 class dict2class:
     def __init__(self, config):
@@ -44,10 +44,7 @@ def update_config(args=None):
     share_config['mid_scale'] = args.mid_scale
     share_config['lge_scale'] = args.lge_scale
     share_config['stride'] = args.stride
-
-    # if do not use chatnivi
-    if args.model_path:
-        share_config['model_path'] = args.model_path
+    share_config['model_path'] = args.model_path
 
     if args.clip_length != None:
         share_config['clip_length'] = args.clip_length
