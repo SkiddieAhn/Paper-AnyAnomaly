@@ -10,10 +10,6 @@ AnyAnomaly: A Zero-shot Approach for Customizable Video Anomaly Detection using 
   
 ![image](https://github.com/user-attachments/assets/f621d667-6079-41ce-8401-3441b9d4b8da)
 
-## After setting the enviroments, Install this packages
-```bash
-pip install -r requirements.txt
-```
 
 ## 1. Requirements and Installation For ChatUniVi
 - ```Chat-UniVi```: [[GitHub]](https://github.com/PKU-YuanGroup/Chat-UniVi)
@@ -26,6 +22,10 @@ conda create -n lvlm python=3.10 -y
 conda activate lvlm
 pip install --upgrade pip
 pip install -e .
+
+# Download extra packages
+cd ../
+pip install -r requirements.txt
 ```
 
 ## Command
@@ -48,6 +48,10 @@ git clone https://github.com/OpenBMB/MiniCPM-V.git
 cd MiniCPM-V
 conda create -n MiniCPM-V python=3.10 -y
 conda activate MiniCPM-V
+pip install -r requirements.txt
+
+# Download extra packages
+cd ../
 pip install -r requirements.txt
 ```
 
@@ -73,6 +77,10 @@ git clone https://github.com/Vision-CAIR/MiniGPT-4.git
 cd MiniGPT-4
 conda env create -f environment.yml
 conda activate minigptv
+
+# Download extra packages
+cd ../
+pip install -r requirements.txt
 ```
 
 ## Following the MiniGPT github for prepare pretrained LLM weights and model checkpoints
@@ -127,6 +135,10 @@ pip install git+https://github.com/huggingface/transformers@a98c41798cf6ed99e1ff
 sudo apt-get install git-lfs
 git lfs install
 git clone https://huggingface.co/MBZUAI/LLaVA-Meta-Llama-3-8B-Instruct-FT
+
+# Download extra packages
+cd ../
+pip install -r requirements.txt
 ```
 
 ## Command
