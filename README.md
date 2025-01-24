@@ -24,12 +24,12 @@ conda activate lvlm
 pip install --upgrade pip
 pip install -e .
 
-# Download LVLM weights
+# Download the Model (Chat-UniVi 7B)
 mkdir weights
 cd weights
+sudo apt-get install git-lfs
+git lfs install
 git lfs clone https://huggingface.co/Chat-UniVi/Chat-UniVi
-(or)
-git lfs clone https://huggingface.co/Chat-UniVi/Chat-UniVi-13B
 
 # Download extra packages
 cd ../../
