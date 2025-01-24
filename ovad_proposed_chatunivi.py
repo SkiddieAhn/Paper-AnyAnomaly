@@ -33,7 +33,7 @@ def main():
     parser.add_argument('--mid_scale', default=True, type=str2bool, nargs='?', const=True)
     parser.add_argument('--sml_scale', default=True, type=str2bool, nargs='?', const=True)
     parser.add_argument('--stride', default=False, type=str2bool, nargs='?', const=True)
-    parser.add_argument('--model_path', default='Chat-UniVi/weights/chatunivi', type=str)
+    parser.add_argument('--model_path', default='Chat-UniVi/weights/Chat-UniVi', type=str)
 
     args = parser.parse_args()
     cfg = update_config(args)
