@@ -136,8 +136,8 @@ sudo apt-get install git-lfs
 git lfs install
 git clone https://huggingface.co/MBZUAI/LLaVA-Meta-Llama-3-8B-Instruct-FT
 
-# Download extra packages
-cd ../
+# Download extra packages 
+cd ../../
 pip install -r requirements.txt
 ```
 
