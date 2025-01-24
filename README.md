@@ -30,7 +30,7 @@ pip install -r requirements.txt
 
 ## Preparing LVLM checkpoints
 - weights: Chat-UniVi 7B [[Huggingface]](https://huggingface.co/Chat-UniVi/Chat-UniVi/tree/main), Chat-UniVi 13B [[Huggingface]](https://huggingface.co/Chat-UniVi/Chat-UniVi-13B/tree/main)
-- Download all files using the link above and move them to the ```Chat-UniVi/weights/chatunivi```. directory
+- Download all files using the link above and move them to the ```Chat-UniVi/weights/chatunivi``` directory
 
 ## Command
 - ```avenue type```: [too_close, bicycle, throwing, running, dancing]
