@@ -130,6 +130,7 @@ cd LLaVA
 pip install --upgrade pip
 pip install -e .
 pip install git+https://github.com/huggingface/transformers@a98c41798cf6ed99e1ff17e3792d6e06a2ff2ff3
+pip install --upgrade transformers
 
 # Download the Model (LLaVA-Meta=Llama-3-8B-Instruct-FT)
 sudo apt-get install git-lfs
