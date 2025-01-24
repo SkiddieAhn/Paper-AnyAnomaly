@@ -13,6 +13,7 @@ AnyAnomaly: A Zero-shot Approach for Customizable Video Anomaly Detection using 
 
 ## 1. Requirements and Installation For ChatUniVi
 - ```Chat-UniVi```: [[GitHub]](https://github.com/PKU-YuanGroup/Chat-UniVi)
+- - weights: Chat-UniVi 7B [[Huggingface]](https://huggingface.co/Chat-UniVi/Chat-UniVi/tree/main), Chat-UniVi 13B [[Huggingface]](https://huggingface.co/Chat-UniVi/Chat-UniVi-13B/tree/main)
 - Python >= 3.10
 - Install required packages:
 ```bash
@@ -23,14 +24,18 @@ conda activate lvlm
 pip install --upgrade pip
 pip install -e .
 
+# Download LVLM weights
+mkdir weights
+cd weights
+git lfs clone https://huggingface.co/Chat-UniVi/Chat-UniVi
+(or)
+git lfs clone https://huggingface.co/Chat-UniVi/Chat-UniVi-13B
+
 # Download extra packages
-cd ../
+cd ../../
 pip install -r requirements.txt
 ```
 
-## Preparing LVLM checkpoints
-- weights: Chat-UniVi 7B [[Huggingface]](https://huggingface.co/Chat-UniVi/Chat-UniVi/tree/main), Chat-UniVi 13B [[Huggingface]](https://huggingface.co/Chat-UniVi/Chat-UniVi-13B/tree/main)
-- Download all files using the link above and move them to the ```Chat-UniVi/weights/chatunivi``` directory
 
 ## Command
 - ```avenue type```: [too_close, bicycle, throwing, running, dancing]
