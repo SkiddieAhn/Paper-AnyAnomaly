@@ -18,8 +18,8 @@ AnyAnomaly: A Zero-shot Approach for Customizable Video Anomaly Detection using 
 ```bash
 git clone https://github.com/PKU-YuanGroup/Chat-UniVi
 cd Chat-UniVi
-conda create -n lvlm python=3.10 -y
-conda activate lvlm
+conda create -n chatunivi python=3.10 -y
+conda activate chatunivi
 pip install --upgrade pip
 pip install -e .
 
