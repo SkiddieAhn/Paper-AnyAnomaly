@@ -33,6 +33,7 @@ git lfs clone https://huggingface.co/Chat-UniVi/Chat-UniVi
 # Download extra packages
 cd ../../
 pip install -r requirements.txt
+pip install numpy==1.24.3
 ```
 
 
