@@ -22,6 +22,7 @@ conda create -n chatunivi python=3.10 -y
 conda activate chatunivi
 pip install --upgrade pip
 pip install -e .
+pip install numpy==1.24.3
 
 # Download the Model (Chat-UniVi 7B)
 mkdir weights
@@ -33,7 +34,6 @@ git lfs clone https://huggingface.co/Chat-UniVi/Chat-UniVi
 # Download extra packages
 cd ../../
 pip install -r requirements.txt
-pip install numpy==1.24.3
 ```
 
 
