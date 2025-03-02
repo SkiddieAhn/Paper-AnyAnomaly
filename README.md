@@ -1,17 +1,50 @@
-# AnyAnomaly
-AnyAnomaly: A Zero-shot Approach for Customizable Video Anomaly Detection using LVLM
+# AnyAnomaly: Zero-Shot Customizable Video Anomaly Detection with LVLM 
+This paper has been submitted to ICCV 2025.
+
+## Description
+Video Anomaly Detection (VAD) is a critical task in video analysis and surveillance within computer vision. However, existing VAD models rely on learned normal patterns, making them difficult to apply across diverse environments. As a result, users must retrain models or develop separate AI models for new environments, which requires expertise in machine learning, high-performance hardware, and extensive data collection, limiting the practical usability of VAD. **To address these challenges, this study proposes Customizable Video Anomaly Detection (C-VAD) and the AnyAnomaly model. C-VAD considers user-defined text as an abnormal event and detects frames containing the specified event in a video.** We implement C-VAD effectively using a Context-aware VQA approach without fine-tuning a Large Vision Language Model (LVLM). To validate the effectiveness of the proposed model, we constructed a C-VAD dataset and demonstrated the superiority of AnyAnomaly. Furthermore, despite adopting a zero-shot approach, our method achieves competitive performance on VAD benchmarks.<br/><br/>
+<img width="850" alt="fig-1" src="https://github.com/user-attachments/assets/938d46a3-56cc-4cd4-8900-84bdfbd64b98">  
+
+## Context-aware VQA
+Comparison of the proposed model with the baseline. Both models perform C-VAD, but the baseline operates with frame-level VQA, whereas the proposed model employs a segment-level Context-Aware VQA.
+**Context-Aware VQA is a method that performs VQA by utilizing additional contexts that describe an image.** To enhance the object analysis and action understanding capabilities of LVLM, we propose Position Context and Temporal Context.
+- **Position Context Tutorial: [[Google Colab](https://colab.research.google.com/drive/1vDU6j2c9YwVEhuvBbUHx5GjorwKKI6sX?usp=sharing)]**
+- **Temporal Context Tutorial: [[Google Colab](https://colab.research.google.com/drive/1xnXjvlUlB8DgbTVGRrwvuLRz2rFAbdQ5?usp=sharing)]**<br/>
+<img width="850" alt="fig-2" src="https://github.com/user-attachments/assets/f0fbef97-693e-4e58-bbc2-d02ee4b89274">  
+
+## Results
+Table 1 and Table 2 present **the evaluation results on the C-VAD datasets (C-ShT, C-Ave).** The proposed model achieved performance improvements of **9.88% and 13.65%** over the baseline on the C-ShT and C-Ave datasets, respectively. Specifically, it showed improvements of **14.34% and 8.2%** in the action class, and **3.25% and 21.98%** in the appearance class.<br/><br/>
+<img width="850" alt="fig-3" src="https://github.com/user-attachments/assets/1118a4ad-cb1d-47db-be72-8602d8e8a6a2">  
+<img width="850" alt="fig-3" src="https://github.com/user-attachments/assets/c16bc817-8538-4503-bf38-85007c72a39a">  
+
+## Qualitative Evaluation 
+- **Anomaly Detection in diverse scenarios**
   
-## Customizable VAD
-![image](https://github.com/user-attachments/assets/12201aec-c562-4884-941d-591318ef5da2)
+|         Text              |Demo  |
+|:--------------:|:-----------:|
+| **Jumping-Falling<br/>-Pickup** |![c5](https://github.com/user-attachments/assets/9110c14b-0999-45ca-9bd0-9319ceed883c)|
+| **Bicycle-<br/>Running** |![c6](https://github.com/user-attachments/assets/c40de3ef-f8f2-462e-9bc7-447fa31be729)|
+| **Bicycle-<br/>Stroller** |![c7](https://github.com/user-attachments/assets/f3cc1bbd-ea8e-4473-a84c-4b692e74ddb4)|
 
-## AnyAnomaly Model
-- ```Position Context tutorial code```: [[Colab]](https://colab.research.google.com/drive/1_BRBkodZeIJLbGqs5r4AO76QqZBeQ5WP)    
-- ```Temporal Context tutorial code```: [[Colab]](https://colab.research.google.com/drive/1Am4d2yMRypMnmvrb11QWco70at9paEb9#scrollTo=3QGYNpk90Vvq)
+- **Anomaly Detection in complex scenarios**
+
+|         Text              |Demo  |
+|:--------------:|:-----------:|
+| **Driving outside<br/> lane** |![c4](https://github.com/user-attachments/assets/4996b407-0ca1-4232-85d6-1f5efbad4ab5)|
+| **People and car<br/> accident** |![c1](https://github.com/user-attachments/assets/2c5faa09-5141-471c-83ef-cee4c4574f5f)|
+| **Jaywalking** |![c2](https://github.com/user-attachments/assets/bc9b6789-0d71-4712-97b9-1007efaed273)|
+| **Walking<br/> drunk** |![c3](https://github.com/user-attachments/assets/eb450801-b700-419d-a920-2799553c2452)|
+
+## Datasets
+- We processed the Shanghai Tech Campus (ShT) and CUHK Avenue (Ave) datasets to create the labels for the C-ShT and C-Ave datasets. These labels can be found in the ```ground_truth``` folder. **To test the C-ShT and C-Ave datasets, you need to first download the ShT and Ave datasets and store them in the directory corresponding to** ```'data_root'```.
+- You can specify the dataset's path by editing ```'data_root'``` in ```config.py```.
   
-![image](https://github.com/user-attachments/assets/f621d667-6079-41ce-8401-3441b9d4b8da)
+|     CUHK Avenue    | Shnaghai Tech.    |
+|:------------------------:|:-----------:|
+|[Official Site](https://www.cse.cuhk.edu.hk/leojia/projects/detectabnormal/dataset.html)|[Official Site](https://svip-lab.github.io/dataset/campus_dataset.html)
 
 
-## 1. Requirements and Installation For ChatUniVi
+## 1. Requirements and Installation For Chat-UniVi
 - ```Chat-UniVi```: [[GitHub]](https://github.com/PKU-YuanGroup/Chat-UniVi)
 - weights: Chat-UniVi 7B [[Huggingface]](https://huggingface.co/Chat-UniVi/Chat-UniVi/tree/main), Chat-UniVi 13B [[Huggingface]](https://huggingface.co/Chat-UniVi/Chat-UniVi-13B/tree/main)
 - Install required packages:
@@ -38,19 +71,21 @@ pip install -r requirements.txt
 
 
 ## Command
-- ```avenue type```: [too_close, bicycle, throwing, running, dancing]
-- ```shtech type```: [car, bicycle, fighting, throwing, hand_truck, running, skateboarding, falling, jumping, loitering, motorcycle]
+- ```C-Ave type```: [too_close, bicycle, throwing, running, dancing]
+- ```C-ShT type```: [car, bicycle, fighting, throwing, hand_truck, running, skateboarding, falling, jumping, loitering, motorcycle]
+- ```C-Ave type (multiple)```: [throwing-too_close, running-throwing]
+- ```C-ShT type (multiple)```: [stroller-running, stroller-loitering, stroller-bicycle, skateboarding-bicycle, running-skateboarding, running-jumping, running-bicycle, jumping-falling-pickup, car-bicycle]
 ```Shell
-# Baseline model (Chat-UniVi) -> Customizable-STC
+# Baseline model (Baseline) → C-ShT
 python -u vad_chatunivi.py --dataset=shtech --type=falling
-# proposed model (AnyAomaly) -> Customizable-STC
-python -u vad_proposed_chatunivi.py --dataset=shtech --type=falling 
-# proposed model (AnyAomaly) -> STC
-python -u ovad_proposed_chatunivi.py --dataset=shtech
+# proposed model (AnyAomaly) → C-ShT
+python -u vad_proposed_chatunivi.py --dataset=shtech --type=falling
+# proposed model (AnyAnomaly) → C-ShT, diverse anomaly scenarios
+python -u vad_proposed_chatunivi.py --dataset=shtech --multiple=True --type=jumping-falling-pickup
 ```
 
-## 2. Requirements and Installation For MiniCPM
-- ```MiniCPM```: [[GitHub]](https://github.com/OpenBMB/MiniCPM-V.git)
+## 2. Requirements and Installation For MiniCPM-V
+- ```MiniCPM-V```: [[GitHub]](https://github.com/OpenBMB/MiniCPM-V.git)
 - Install required packages:
 ```bash
 git clone https://github.com/OpenBMB/MiniCPM-V.git
@@ -65,102 +100,12 @@ pip install -r requirements.txt
 ```
 
 ## Command
-- ```avenue type```: [too_close, bicycle, throwing, running, dancing]
-- ```shtech type```: [car, bicycle, fighting, throwing, hand_truck, running, skateboarding, falling, jumping, loitering, motorcycle]
-- ```model path```: MiniCPM-V-2_6, MiniCPM-V-2_6-int4, MiniCPM-Llama3-V-2_5, MiniCPM-Llama3-V-2_5-int4, MiniCPM-V-2, MiniCPM-V
 ```Shell
-# Baseline model (MiniCPM) -> Customizable-STC
-python -u vad_MiniCPM.py --dataset=shtech --type=falling --model_path=MiniCPM-Llama3-V-2_5
-# proposed model (AnyAomaly) -> Customizable-STC
-python -u vad_proposed_MiniCPM.py --dataset=shtech --type=falling --model_path=MiniCPM-Llama3-V-2_5
-# proposed model (AnyAomaly) -> STC
-python -u ovad_proposed_MiniCPM.py --dataset=shtech
-```
-
-
-## 3. Requirements and Installation For MiniGPT-4
-- ```MiniGPT-4```: [[GitHub]](https://github.com/Vision-CAIR/MiniGPT-4.git)
-- Install required packages:
-```bash
-git clone https://github.com/Vision-CAIR/MiniGPT-4.git
-cd MiniGPT-4
-conda env create -f environment.yml
-conda activate minigptv
-
-# Download extra packages
-cd ../
-pip install -r requirements.txt
-```
-
-## Preparing LVLM checkpoints
-- ```MiniGPT-4```: [[GitHub]](https://github.com/Vision-CAIR/MiniGPT-4.git)
-- LLM weights: Llama 2 Chat 7B, Vicuna V0 13B, Vicuna V0 7B
-- Model checkpoints; MiniGPT-4 (Vicuna 13B), MiniGPT-4 (Vicuna 7B), MiniGPT-4 (LLaMA-2 Chat 7B)
-- set the path on the config file for LLM weights and model checkpoints
-    - LLM weights
-        - LLaMA-2: MiniGPT-4/minigpt4/configs/models/minigpt4_llama2.yaml Line 15
-        - Vicuna: MiniGPT-4/minigpt4/configs/models/minigpt4_vicuna0.yaml Line 18
-    - Model Checkpoints
-        - LLaMA-2: MiniGPT-4/eval_configs/minigpt4_llama2_eval.yaml Line 8
-        - Vicuna: MiniGPT-4/eval_configs/minigpt4_eval.yaml Line 8
-
-## Command
-- ```avenue type```: [too_close, bicycle, throwing, running, dancing]
-- ```shtech type```: [car, bicycle, fighting, throwing, hand_truck, running, skateboarding, falling, jumping, loitering, motorcycle]
-- ```model path```: minigpt4_llama2_eval.yaml, minigpt4_eval.yaml
-```Shell
-# Baseline model (MiniGPT-4) -> Customizable-STC
-python -u vad_minigpt.py --dataset=shtech --type=falling --model_path=MiniGPT-4/eval_configs/minigpt4_llama2_eval.yaml
-# proposed model (AnyAomaly) -> Customizable-STC
-python -u vad_proposed_minigpt.py --dataset=shtech --type=falling --model_path=MiniGPT-4/eval_configs/minigpt4_llama2_eval.yaml
-# proposed model (AnyAomaly) -> STC
-python -u ovad_proposed_minigpt.py --dataset=shtech
-```
-
-
-## 4. Requirements and Installation For LLaVA-pp
-- ```LLaVA-pp```: [[GitHub]](https://github.com/mbzuai-oryx/LLaVA-pp)
-- Install required packages:
-```bash
-git clone https://github.com/mbzuai-oryx/LLaVA-pp.git
-cd LLaVA-pp
-git submodule update --init --recursive
-
-# for LLaMA-3-V
-cp LLaMA-3-V/train.py LLaVA/llava/train/train.py
-cp LLaMA-3-V/conversation.py LLaVA/llava/conversation.py
-cp LLaMA-3-V/builder.py LLaVA/llava/model/builder.py
-cp LLaMA-3-V/llava_llama.py LLaVA/llava/model/language_model/llava_llama.py
-
-# Create enviroments
-conda create -n llava
-conda activate llava
-cd LLaVA
-pip install --upgrade pip
-pip install -e .
-pip install git+https://github.com/huggingface/transformers@a98c41798cf6ed99e1ff17e3792d6e06a2ff2ff3
-pip install --upgrade transformers
-
-# Download the Model (LLaVA-Meta=Llama-3-8B-Instruct-FT)
-sudo apt-get install git-lfs
-git lfs install
-git clone https://huggingface.co/MBZUAI/LLaVA-Meta-Llama-3-8B-Instruct-FT
-
-# Download extra packages 
-cd ../../
-pip install -r requirements.txt
-```
-
-## Command
-- ```avenue type```: [too_close, bicycle, throwing, running, dancing]
-- ```shtech type```: [car, bicycle, fighting, throwing, hand_truck, running, skateboarding, falling, jumping, loitering, motorcycle]
-- ```model path```: LLaVA-Meta-Llama-3-8B-Instruct-FT, ...
-```Shell
-# Baseline model (LLaVA-pp) -> Customizable-STC
-python -u vad_llavapp.py --dataset=shtech --type=falling --model_path=LLaVA-pp/LLaVA/LLaVA-Meta-Llama-3-8B-Instruct-FT
-# proposed model (AnyAomaly) -> Customizable-STC
-python -u vad_proposed_llavapp.py --dataset=shtech --type=falling --model_path=LLaVA-pp/LLaVA/LLaVA-Meta-Llama-3-8B-Instruct-FT
-# proposed model (AnyAomaly) -> STC
-python -u ovad_proposed_llavapp.py --dataset=shtech
+# Baseline model (Baseline) → C-ShT
+python -u vad_MiniCPM.py --dataset=shtech --type=falling 
+# proposed model (AnyAomaly) → C-ShT
+python -u vad_proposed_MiniCPM.py --dataset=shtech --type=falling 
+# proposed model (AnyAnomaly) → C-ShT, diverse anomaly scenarios
+python -u vad_proposed_MiniCPM.py --dataset=shtech --multiple=True --type=jumping-falling-pickup
 ```
 

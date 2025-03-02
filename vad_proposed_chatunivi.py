@@ -89,7 +89,7 @@ def main():
                 cp_loader = clip_path_loader(video_path, cfg.clip_length)
 
                 # anomaly detection using LVLM (segment-level) 
-                for cp in cp_loader:
+                for cp in progress_bar(cp_loader, total=len(cp_loader)):
                     max_score = 0 
                     max_score_wa = 0 
                     max_score_tc = 0 

@@ -94,13 +94,13 @@ def min_max_normalize(arr, eps=1e-8):
     return normalized_arr
 
 
-def save_two_graph(answers_idx, scores1, scores2, auc1, auc2, file_path, x='Frame', y='Anomaly Score'):
+def save_two_graph(answers_idx, scores1, scores2, auc1, auc2, file_path, x='Frame', y='Anomaly Score', lb1='max', lb2='text'):
     length = len(scores1)
     plt.clf()
     plt.figure(figsize=(10, 5))
-    plt.plot([num for num in range(length)],[score for score in scores1], label=f'Baseline: AUC={auc1:.3f}%', color='black') # plotting
-    plt.plot([num for num in range(length)],[score for score in scores2], label=f'Proposed: AUC={auc2:.3f}%', color='blue') # plotting
-    plt.bar(answers_idx, max(scores1), width=1, color='#BBCBE7',alpha=0.5, label='Ground-truth') # check answer
+    plt.plot([num for num in range(length)],[score for score in scores1], label=f'{lb1}: AUC={auc1:.3f}%', color='black') # plotting
+    plt.plot([num for num in range(length)],[score for score in scores2], label=f'{lb2}: AUC={auc2:.3f}%', color='blue') # plotting
+    plt.bar(answers_idx, 1, width=1, color='#BBCBE7',alpha=0.5, label='Ground-truth') # check answer
     plt.xlabel(x, fontsize=12)
     plt.ylabel(y, fontsize=12)
     plt.legend(fontsize=12)
@@ -136,9 +136,10 @@ def save_score_graph(answers_idx, scores, file_path, x='Frame', y='Anomaly Score
 def load_names_paths(cfg):
     # load multiple video paths
     if cfg.multiple:
-        video_names = os.listdir(cfg.test_data_path)
-        video_names.sort()
-        video_paths = [os.path.join(cfg.test_data_path, name) for name in video_names]
+        with open(cfg.m_json_path, "r", encoding='utf-8') as json_file:
+            data = json.load(json_file)
+            video_names = data[cfg.type]
+            video_paths = [os.path.join(cfg.test_data_path, name) for name in video_names]
 
     # load all video paths
     else:
@@ -148,13 +149,6 @@ def load_names_paths(cfg):
         video_names = [name for name in video_names if not name in except_arr]
         video_paths = [os.path.join(cfg.test_data_path, name) for name in video_names if not name in except_arr]
 
-    return video_names, video_paths
-
-
-def ovad_load_names_paths(cfg):
-    video_names = os.listdir(cfg.test_data_path)
-    video_names.sort()
-    video_paths = [os.path.join(cfg.test_data_path, name) for name in video_names]
     return video_names, video_paths
 
 

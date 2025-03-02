@@ -76,7 +76,7 @@ def main():
                 frame_loader = frame_path_loader(video_path)
 
                 # anomaly detection using LVLM (frame-level) 
-                for fr in frame_loader:
+                for fr in progress_bar(frame_loader, total=len(frame_loader)):
                     max_score = 0 
 
                     # multiple keyword processing 
