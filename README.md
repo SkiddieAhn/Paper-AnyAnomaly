@@ -110,4 +110,4 @@ python -u vad_proposed_MiniCPM.py --dataset=shtech --multiple=True --type=jumpin
 ```
 
 ## Contact
-If you have any questions, please open an issue in this repository or contact us at skd@yonsei.ac.kr and jyy1551@yonsei.ac.kr.
+Should you have any question, please create an issue on this repository or contact me at skd@yonsei.ac.kr.
