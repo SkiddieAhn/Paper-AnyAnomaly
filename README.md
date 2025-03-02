@@ -109,3 +109,5 @@ python -u vad_proposed_MiniCPM.py --dataset=shtech --type=falling
 python -u vad_proposed_MiniCPM.py --dataset=shtech --multiple=True --type=jumping-falling-pickup
 ```
 
+## Contact
+If you have any questions, please open an issue in this repository or contact us at skd@yonsei.ac.kr and jyy1551@yonsei.ac.kr.
