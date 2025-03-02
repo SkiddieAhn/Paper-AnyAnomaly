@@ -1,4 +1,8 @@
 # AnyAnomaly: Zero-Shot Customizable Video Anomaly Detection with LVLM 
+[![Colab1](https://img.shields.io/badge/⚡-Colab%20Totorial%201-yellow.svg)](https://colab.research.google.com/drive/1vDU6j2c9YwVEhuvBbUHx5GjorwKKI6sX?usp=sharing)
+[![Colab2](https://img.shields.io/badge/⚡-Colab%20Tutorial%202-green.svg)](https://colab.research.google.com/drive/1xnXjvlUlB8DgbTVGRrwvuLRz2rFAbdQ5?usp=sharing)
+
+
 This repository is the ```official open-source``` of [AnyAnomaly: Zero-Shot Customizable Video Anomaly Detection with LVLM](https://google.com) by Sunghyun Ahn*, Youngwan Jo*, Kijung Lee, Sein Kwon, Inpyo Hong and Sanghyun Park. ```(*equally contributed)```
 
 ## Description
