@@ -76,7 +76,7 @@ pip install -r requirements.txt
 - ```C-Ave type (multiple)```: [throwing-too_close, running-throwing]
 - ```C-ShT type (multiple)```: [stroller-running, stroller-loitering, stroller-bicycle, skateboarding-bicycle, running-skateboarding, running-jumping, running-bicycle, jumping-falling-pickup, car-bicycle]
 ```Shell
-# Baseline model (Baseline) → C-ShT
+# Baseline model (Chat-UniVi) → C-ShT
 python -u vad_chatunivi.py --dataset=shtech --type=falling
 # proposed model (AnyAomaly) → C-ShT
 python -u vad_proposed_chatunivi.py --dataset=shtech --type=falling
@@ -101,7 +101,7 @@ pip install -r requirements.txt
 
 ## Command
 ```Shell
-# Baseline model (Baseline) → C-ShT
+# Baseline model (MiniCPM-V) → C-ShT
 python -u vad_MiniCPM.py --dataset=shtech --type=falling 
 # proposed model (AnyAomaly) → C-ShT
 python -u vad_proposed_MiniCPM.py --dataset=shtech --type=falling 
