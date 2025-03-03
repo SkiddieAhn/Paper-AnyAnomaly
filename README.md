@@ -27,7 +27,7 @@ Table 1 and Table 2 present **the evaluation results on the C-VAD datasets (C-Sh
   
 |         Text              |Demo  |
 |:--------------:|:-----------:|
-| **Jumping-Falling<br/>-Pickup** |![c5](https://github.com/user-attachments/assets/9110c14b-0999-45ca-9bd0-9319ceed883c)|
+| **Jumping-Falling<br/>-Pickup** |![c5-2](https://github.com/user-attachments/assets/cc57d098-c685-4fc6-8959-414f1180bd0c)|
 | **Bicycle-<br/>Running** |![c6-2](https://github.com/user-attachments/assets/d62c0052-ee7b-452c-b3ce-a8fe9e5fcd5f)|
 | **Bicycle-<br/>Stroller** |![c7](https://github.com/user-attachments/assets/f3cc1bbd-ea8e-4473-a84c-4b692e74ddb4)|
 
