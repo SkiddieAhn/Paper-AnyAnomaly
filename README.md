@@ -3,7 +3,6 @@
 [![Colab1](https://img.shields.io/badge/⚡-Colab%20Totorial%201-yellow.svg)](https://colab.research.google.com/drive/1vDU6j2c9YwVEhuvBbUHx5GjorwKKI6sX?usp=sharing)
 [![Colab2](https://img.shields.io/badge/⚡-Colab%20Tutorial%202-green.svg)](https://colab.research.google.com/drive/1xnXjvlUlB8DgbTVGRrwvuLRz2rFAbdQ5?usp=sharing)
 
-
 This repository is the ```official open-source``` of [AnyAnomaly: Zero-Shot Customizable Video Anomaly Detection with LVLM](https://google.com) by Sunghyun Ahn*, Youngwan Jo*, Kijung Lee, Sein Kwon, Inpyo Hong and Sanghyun Park. ```(*equally contributed)```
 
 ## Description
@@ -27,8 +26,8 @@ Table 1 and Table 2 present **the evaluation results on the C-VAD datasets (C-Sh
   
 |         Text              |Demo  |
 |:--------------:|:-----------:|
-| **Jumping-Falling<br/>-Pickup** |![c5-2](https://github.com/user-attachments/assets/cc57d098-c685-4fc6-8959-414f1180bd0c)|
-| **Bicycle-<br/>Running** |![c6-2](https://github.com/user-attachments/assets/d62c0052-ee7b-452c-b3ce-a8fe9e5fcd5f)|
+| **Jumping-Falling<br/>-Pickup** |![c5-2](https://github.com/user-attachments/assets/c847dbe7-2116-4e83-b3e2-0adb1f771cbd)|
+| **Bicycle-<br/>Running** |![c6-2](https://github.com/user-attachments/assets/c6270e16-6ec6-4671-904e-637cd85e74a3)|
 | **Bicycle-<br/>Stroller** |![c7](https://github.com/user-attachments/assets/f3cc1bbd-ea8e-4473-a84c-4b692e74ddb4)|
 
 
@@ -51,6 +50,7 @@ Table 1 and Table 2 present **the evaluation results on the C-VAD datasets (C-Sh
 
 
 ## 1. Requirements and Installation For Chat-UniVi
+- **Once Chat-UniVi is ready, you can move the provided ```tutorial files``` to the main directory and run them directly!**
 - ```Chat-UniVi```: [[GitHub]](https://github.com/PKU-YuanGroup/Chat-UniVi)
 - weights: Chat-UniVi 7B [[Huggingface]](https://huggingface.co/Chat-UniVi/Chat-UniVi/tree/main), Chat-UniVi 13B [[Huggingface]](https://huggingface.co/Chat-UniVi/Chat-UniVi-13B/tree/main)
 - Install required packages:
