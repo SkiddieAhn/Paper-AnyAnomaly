@@ -28,8 +28,9 @@ Table 1 and Table 2 present **the evaluation results on the C-VAD datasets (C-Sh
 |         Text              |Demo  |
 |:--------------:|:-----------:|
 | **Jumping-Falling<br/>-Pickup** |![c5](https://github.com/user-attachments/assets/9110c14b-0999-45ca-9bd0-9319ceed883c)|
-| **Bicycle-<br/>Running** |![c6](https://github.com/user-attachments/assets/c40de3ef-f8f2-462e-9bc7-447fa31be729)|
+| **Bicycle-<br/>Running** |![c6-2](https://github.com/user-attachments/assets/d62c0052-ee7b-452c-b3ce-a8fe9e5fcd5f)|
 | **Bicycle-<br/>Stroller** |![c7](https://github.com/user-attachments/assets/f3cc1bbd-ea8e-4473-a84c-4b692e74ddb4)|
+
 
 - **Anomaly Detection in complex scenarios**
 
