@@ -44,9 +44,9 @@ Table 1 and Table 2 present **the evaluation results on the C-VAD datasets (C-Sh
 - We processed the Shanghai Tech Campus (ShT) and CUHK Avenue (Ave) datasets to create the labels for the C-ShT and C-Ave datasets. These labels can be found in the ```ground_truth``` folder. **To test the C-ShT and C-Ave datasets, you need to first download the ShT and Ave datasets and store them in the directory corresponding to** ```'data_root'```.
 - You can specify the dataset's path by editing ```'data_root'``` in ```config.py```.
   
-|     CUHK Avenue    | Shnaghai Tech.    |
-|:------------------------:|:-----------:|
-|[Official Site](https://www.cse.cuhk.edu.hk/leojia/projects/detectabnormal/dataset.html)|[Official Site](https://svip-lab.github.io/dataset/campus_dataset.html)
+|     CUHK Avenue    | Shnaghai Tech.    | Quick Download |
+|:------------------------:|:-----------:|:-----------:|
+|[Official Site](https://www.cse.cuhk.edu.hk/leojia/projects/detectabnormal/dataset.html)|[Official Site](https://svip-lab.github.io/dataset/campus_dataset.html)|[GitHub Page](https://github.com/SkiddieAhn/Paper-VideoPatchCore/blob/main/DATA_README.md)
 
 
 ## 1. Requirements and Installation For Chat-UniVi
