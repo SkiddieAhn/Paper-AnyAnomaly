@@ -7,39 +7,38 @@ This repository is the ```official open-source``` of [AnyAnomaly: Zero-Shot Cust
 
 ## Description
 Video anomaly detection (VAD) is crucial for video analysis and surveillance in computer vision. However, existing VAD models rely on learned normal patterns, which makes them difficult to apply to diverse environments. Consequently, users should retrain models or develop separate AI models for new environments, which requires expertise in machine learning, high-performance hardware, and extensive data collection, limiting the practical usability of VAD. **To address these challenges, this study proposes customizable video anomaly detection (C-VAD) technique and the AnyAnomaly model. C-VAD considers user-defined text as an abnormal event and detects frames containing a specified event in a video.** We effectively implemented AnyAnomaly using a context-aware visual question answering without fine-tuning the large vision language model. To validate the effectiveness of the proposed model, we constructed C-VAD datasets and demonstrated the superiority of AnyAnomaly. Furthermore, our approach showed competitive performance on VAD benchmark datasets, achieving state-of-the-art results on the UBnormal dataset and outperforming other methods in generalization across all datasets.<br/><br/>
-<img width="850" alt="fig-1" src="https://github.com/user-attachments/assets/16807b72-e4b6-4a84-8550-7642f2fdf9ad">  
+<img width="850" alt="fig-1" src="https://github.com/user-attachments/assets/5cff1d90-8957-425d-9fbd-78b6342acdc9">  
 
 ## Context-aware VQA
 Comparison of the proposed model with the baseline. Both models perform C-VAD, but the baseline operates with frame-level VQA, whereas the proposed model employs a segment-level Context-Aware VQA.
 **Context-Aware VQA is a method that performs VQA by utilizing additional contexts that describe an image.** To enhance the object analysis and action understanding capabilities of LVLM, we propose Position Context and Temporal Context.
 - **Position Context Tutorial: [[Google Colab](https://colab.research.google.com/drive/1vDU6j2c9YwVEhuvBbUHx5GjorwKKI6sX?usp=sharing)]**
 - **Temporal Context Tutorial: [[Google Colab](https://colab.research.google.com/drive/1xnXjvlUlB8DgbTVGRrwvuLRz2rFAbdQ5?usp=sharing)]**<br/>
-<img width="850" alt="fig-2" src="https://github.com/user-attachments/assets/bf814ab4-0363-469f-8814-7dea2ad10d52">  
+<img width="850" alt="fig-2" src="https://github.com/user-attachments/assets/aa318443-9e12-4500-bdb6-2601adb23d0a">  
 
 ## Results
 Table 1 and Table 2 present **the evaluation results on the C-VAD datasets (C-ShT, C-Ave).** The proposed model achieved performance improvements of **9.88% and 13.65%** over the baseline on the C-ShT and C-Ave datasets, respectively. Specifically, it showed improvements of **14.34% and 8.2%** in the action class, and **3.25% and 21.98%** in the appearance class.<br/><br/>
-<img width="850" alt="fig-3" src="https://github.com/user-attachments/assets/e86a8596-063c-4b17-a029-e5e917fda88f">  
-<img width="850" alt="fig-3" src="https://github.com/user-attachments/assets/d1b36414-e699-4fdb-9b29-b1ab7160afe4">  
+<img width="850" alt="fig-3" src="https://github.com/user-attachments/assets/136cd177-b84f-4d23-af52-2528afebeee2">  
+<img width="850" alt="fig-3" src="https://github.com/user-attachments/assets/bc69c74b-adf5-472b-b6f3-e7149a8a2d71">  
 
 ## Qualitative Evaluation 
 - **Anomaly Detection in diverse scenarios**
   
 |         Text              |Demo  |
 |:--------------:|:-----------:|
-| **Jumping-Falling<br/>-Pickup** |![c5-2](https://github.com/user-attachments/assets/55cb83cd-3e89-4309-8bac-efb4808eb57d)|
-| **Bicycle-<br/>Running** |![c6-2](https://github.com/user-attachments/assets/8b1348bc-cc86-4895-abbb-f11882586d76)|
-| **Bicycle-<br/>Stroller** |![c7](https://github.com/user-attachments/assets/ead0a1bd-bce1-49b8-96f0-595773ad760c)|
+| **Jumping-Falling<br/>-Pickup** |![c5-2](https://github.com/user-attachments/assets/8c7e9814-da21-4879-b085-b77530bd8592)|
+| **Bicycle-<br/>Running** |![c6-2](https://github.com/user-attachments/assets/c855fba6-c823-4fff-8c99-44e573c5c0bd)|
+| **Bicycle-<br/>Stroller** |![c7](https://github.com/user-attachments/assets/c5df5b82-e938-42f7-8ee7-dbde517198ec)|
 
 
 - **Anomaly Detection in complex scenarios**
 
 |         Text              |Demo  |
 |:--------------:|:-----------:|
-| **Driving outside<br/> lane** |![c4](https://github.com/user-attachments/assets/69dabe3b-518f-474d-96e7-7c9965caf5fe)|
-| **People and car<br/> accident** |![c1](https://github.com/user-attachments/assets/3c20c39b-d0da-44f4-94cf-10a8beff2cbc)|
-| **Jaywalking** |![c2](https://github.com/user-attachments/assets/4a2eda4c-1519-47ee-9984-39a25a42bbcc)|
-| **Walking<br/> drunk** |![c3](https://github.com/user-attachments/assets/662c2c92-1a0b-485c-aea2-40a9ccba052d)|
-
+| **Driving outside<br/> lane** |![c4](https://github.com/user-attachments/assets/fd3bb6c7-16b5-4d54-bea0-ae002d7e34a9)|
+| **People and car<br/> accident** |![c1](https://github.com/user-attachments/assets/511738d1-f38e-46f6-ba38-535ecb3f2a42)|
+| **Jaywalking** |![c2](https://github.com/user-attachments/assets/203f92c0-923d-4dfd-bdfa-4e44bbd112ed)|
+| **Walking<br/> drunk** |![c3](https://github.com/user-attachments/assets/f22126b0-6d5b-4c0c-a12a-0747d11bc01a)|
 
 ## Datasets
 - We processed the Shanghai Tech Campus (ShT) and CUHK Avenue (Ave) datasets to create the labels for the C-ShT and C-Ave datasets. These labels can be found in the ```ground_truth``` folder. **To test the C-ShT and C-Ave datasets, you need to first download the ShT and Ave datasets and store them in the directory corresponding to** ```'data_root'```.
