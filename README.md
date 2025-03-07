@@ -22,7 +22,7 @@ Table 1 and Table 2 present **the evaluation results on the C-VAD datasets (C-Sh
 <img width="850" alt="fig-3" src="https://github.com/user-attachments/assets/bc69c74b-adf5-472b-b6f3-e7149a8a2d71">  
 
 ## Qualitative Evaluation 
-- **Anomaly Detection in diverse scenarios**
+- **Anomaly Detection in Diverse scenarios**
   
 |         Text              |Demo  |
 |:--------------:|:-----------:|
@@ -31,7 +31,7 @@ Table 1 and Table 2 present **the evaluation results on the C-VAD datasets (C-Sh
 | **Bicycle-<br/>Stroller** |![c7](https://github.com/user-attachments/assets/c5df5b82-e938-42f7-8ee7-dbde517198ec)|
 
 
-- **Anomaly Detection in complex scenarios**
+- **Anomaly Detection in Complex scenarios**
 
 |         Text              |Demo  |
 |:--------------:|:-----------:|
