@@ -115,5 +115,16 @@ python -u vad_proposed_MiniCPM.py --dataset=shtech --type=falling
 python -u vad_proposed_MiniCPM.py --dataset=shtech --multiple=True --type=jumping-falling-pickup
 ```
 
+## Citation
+If you use our work, please consider citing:  
+```Shell
+@article{ahn2025anyanomaly,
+  title={AnyAnomaly: Zero-Shot Customizable Video Anomaly Detection with LVLM},
+  author={Ahn, Sunghyun and Jo, Youngwan and Lee, Kijung and Kwon, Sein and Hong, Inpyo and Park, Sanghyun},
+  journal={arXiv preprint arXiv:2503.04504},
+  year={2025}
+}
+```
+
 ## Contact
 Should you have any question, please create an issue on this repository or contact me at skd@yonsei.ac.kr.
