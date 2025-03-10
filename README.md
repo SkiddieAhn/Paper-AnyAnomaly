@@ -1,5 +1,6 @@
 # AnyAnomaly: Zero-Shot Customizable Video Anomaly Detection with LVLM 
 [![arXiv](https://img.shields.io/badge/arXiv-2503.04504-b31b1b.svg?logo=arXiv)](https://arxiv.org/abs/2503.04504)
+[![hf](https://img.shields.io/badge/🤗-Hugging%20Face-blue.svg)](https://huggingface.co/papers/2503.04504)
 [![Colab1](https://img.shields.io/badge/⚡-Colab%20Totorial%201-yellow.svg)](https://colab.research.google.com/drive/1vDU6j2c9YwVEhuvBbUHx5GjorwKKI6sX?usp=sharing)
 [![Colab2](https://img.shields.io/badge/⚡-Colab%20Tutorial%202-green.svg)](https://colab.research.google.com/drive/1xnXjvlUlB8DgbTVGRrwvuLRz2rFAbdQ5?usp=sharing)
 
