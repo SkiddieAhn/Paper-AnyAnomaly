@@ -106,14 +106,23 @@ cd ../
 pip install -r requirements.txt
 ```
 
+## 3. Requirements and Installation For Qwen2.5-VL (vLLM)
+- ```Qwen2.5-VL```: [[GitHub]](https://github.com/QwenLM/Qwen2.5-VL) [[vLLM]](https://docs.vllm.ai/projects/recipes/en/latest/Qwen/Qwen2.5-VL.html)
+- weights: Qwen2.5-VL 3B [[Huggingface]](https://huggingface.co/Qwen/Qwen2.5-VL-3B-Instruct), Qwen2.5-VL 7B [[Huggingface]](https://huggingface.co/Qwen/Qwen2.5-VL-7B-Instruct)
+- Install required packages:
+```bash
+pip install -U vllm --torch-backend auto
+pip install git+https://github.com/huggingface/transformers accelerate
+pip install qwen-vl-utils[decord]==0.0.8
+pip install -r requirements.txt
+```
+
 ## Command
 ```Shell
-# Baseline model (MiniCPM-V) → C-ShT
-python -u vad_MiniCPM.py --dataset=shtech --type=falling 
 # proposed model (AnyAomaly) → C-ShT
-python -u vad_proposed_MiniCPM.py --dataset=shtech --type=falling 
+python -u vad_proposed_Qwen_vllm.py --dataset=shtech --type=falling 
 # proposed model (AnyAnomaly) → C-ShT, diverse anomaly scenarios
-python -u vad_proposed_MiniCPM.py --dataset=shtech --multiple=True --type=jumping-falling-pickup
+python -u vad_proposed_Qwen_vllm.py --dataset=shtech --multiple=True --type=jumping-falling-pickup
 ```
 
 ## Citation
