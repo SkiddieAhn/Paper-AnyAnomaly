@@ -117,6 +117,7 @@ pip install -r requirements.txt
 ```bash
 pip install -U vllm --torch-backend auto
 pip install git+https://github.com/huggingface/transformers accelerate
+pip install flash-attn
 pip install qwen-vl-utils[decord]==0.0.8
 pip install -r requirements.txt
 ```
