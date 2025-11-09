@@ -7,7 +7,7 @@
 This repository is the ```official open-source``` of [AnyAnomaly: Zero-Shot Customizable Video Anomaly Detection with LVLM](https://arxiv.org/pdf/2503.04504) by Sunghyun Ahn*, Youngwan Jo*, Kijung Lee, Sein Kwon, Inpyo Hong and Sanghyun Park. ```(*equally contributed)```
 
 ## 📣 News
-* **[2025/11/09]** Our AnyAnomaly paper has been accepted to **WACV 2026**!
+* **[2025/11/09]** Our paper has been accepted to **WACV 2026**!
 * **[2025/09/20]** The **Qwen2.5-VL utilizing vLLM** code has been released!
 * **[2025/05/10]** Our **codes and tutorials** are released!
 
