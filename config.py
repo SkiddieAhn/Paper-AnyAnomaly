@@ -45,6 +45,10 @@ def update_config(args=None):
     share_config['mid_scale'] = args.mid_scale
     share_config['lge_scale'] = args.lge_scale
     share_config['stride'] = args.stride
+    share_config['sigma'] = args.sigma
+    share_config['alpha'] = args.alpha
+    share_config['beta'] = args.beta
+    share_config['gamma'] = args.gamma
 
     if args.clip_length != None:
         share_config['clip_length'] = args.clip_length

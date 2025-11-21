@@ -23,12 +23,16 @@ def main():
     parser.add_argument('--clip_length', default=None, type=int)
     parser.add_argument('--template_adaption', default=False, type=str2bool, nargs='?', const=True)
     parser.add_argument('--class_adaption', default=False, type=str2bool, nargs='?', const=True)
-    parser.add_argument('--kfs_num', default=0, type=int, help='1: random, 2: clip, 3: grouping->clip, 4: clip->grouping')
+    parser.add_argument('--kfs_num', default=0, type=int, help='not used option')
     parser.add_argument('--lge_scale', default=False, type=str2bool, nargs='?', const=True)
     parser.add_argument('--mid_scale', default=False, type=str2bool, nargs='?', const=True)
     parser.add_argument('--sml_scale', default=False, type=str2bool, nargs='?', const=True)
     parser.add_argument('--stride', default=False, type=str2bool, nargs='?', const=True)
     parser.add_argument('--model_path', default='MiniCPM-Llama3-V-2_5', type=str)
+    parser.add_argument('--sigma', default=15, type=int, help='Gaussian filter sigma value for post-processing (1-20 works best for most datasets)')
+    parser.add_argument('--alpha', default=0, type=float, help='not used option')
+    parser.add_argument('--beta', default=0, type=float, help='not used option')
+    parser.add_argument('--gamma', default=0, type=float, help='not used option')
 
     args = parser.parse_args()
     cfg = update_config(args)
@@ -122,23 +126,17 @@ def main():
                 predicted.append(np.array(item['scores']))
             predicted = np.concatenate(predicted, axis=0)
 
-        best_auc = 0 
-        for sigma in range(1, 100):
-            # post-processing
-            g_predicted = gaussian_filter1d(predicted, sigma=sigma)
-            mm_predicted = min_max_normalize(g_predicted)
+        # post-processing with user-specified sigma
+        g_predicted = gaussian_filter1d(predicted, sigma=cfg.sigma)
+        mm_predicted = min_max_normalize(g_predicted)
 
-            # get auc
-            fpr, tpr, _ = metrics.roc_curve(gt, mm_predicted, pos_label=1)
-            auc = metrics.auc(fpr, tpr)
+        # get auc
+        fpr, tpr, _ = metrics.roc_curve(gt, mm_predicted, pos_label=1)
+        auc = metrics.auc(fpr, tpr)
+        best_auc = auc
+        best_predicted = mm_predicted
 
-            # update best auc
-            if auc > best_auc:
-                best_predicted = mm_predicted  
-                best_auc = auc
-
-
-        print('total auc:', best_auc)
+        print(f'total auc (sigma={cfg.sigma}):', best_auc)
         anomalies_idx = [i for i,l in enumerate(gt) if l==1] 
         graph_path = f'results/{cfg.dataset_name}/{cfg.type}/{cfg.prompt_type}/minicpm_{cfg.dataset_name}_{cfg.type}_{cfg.prompt_type}.jpg'
         save_score_auc_graph(anomalies_idx, best_predicted, best_auc, graph_path)

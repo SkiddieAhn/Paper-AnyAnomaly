@@ -34,10 +34,18 @@ def main():
     parser.add_argument('--sml_scale', default=True, type=str2bool, nargs='?', const=True)
     parser.add_argument('--stride', default=False, type=str2bool, nargs='?', const=True)
     parser.add_argument('--model_path', default='MiniCPM-Llama3-V-2_5', type=str)
+    parser.add_argument('--sigma', default=15, type=int, help='Gaussian filter sigma value for post-processing (1-20 works best for most datasets)')
+    parser.add_argument('--alpha', default=0.6, type=float, help='Weight for original score in combination (alpha + beta + gamma = 1.0)')
+    parser.add_argument('--beta', default=0.3, type=float, help='Weight for WA score in combination (alpha + beta + gamma = 1.0)')
+    parser.add_argument('--gamma', default=0.1, type=float, help='Weight for TC score in combination (alpha + beta + gamma = 1.0)')
 
     args = parser.parse_args()
     cfg = update_config(args)
     cfg.print_cfg()
+
+    # Validate that alpha + beta + gamma = 1.0
+    if not abs(cfg.alpha + cfg.beta + cfg.gamma - 1.0) < 1e-6:
+        raise ValueError(f"alpha({cfg.alpha}) + beta({cfg.beta}) + gamma({cfg.gamma}) must equal 1.0")
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu") 
     print(device)
@@ -181,107 +189,20 @@ def main():
         original operation
         =======================
         '''
-        best_auc = 0 
-        for sigma in range(1, 100):
-            # post-processing
-            g_predicted = gaussian_filter1d(predicted, sigma=sigma)
-            mm_predicted = min_max_normalize(g_predicted)
+        # post-processing with user-specified sigma
+        g_predicted = gaussian_filter1d(predicted, sigma=cfg.sigma)
+        mm_predicted = min_max_normalize(g_predicted)
 
-            # get auc
-            fpr, tpr, _ = metrics.roc_curve(labels, mm_predicted, pos_label=1)
-            auc = metrics.auc(fpr, tpr)
+        # get auc
+        fpr, tpr, _ = metrics.roc_curve(labels, mm_predicted, pos_label=1)
+        org_best_auc = metrics.auc(fpr, tpr)
+        org_best_predicted = mm_predicted
 
-            # update best auc
-            if auc > best_auc:
-                best_predicted = mm_predicted
-                best_auc = auc
-
-        org_best_predicted = best_predicted
-        org_best_auc = best_auc
-
-        print('org auc:', best_auc)
+        print(f'org auc (sigma={cfg.sigma}):', org_best_auc)
         print('-----------------------------------')
         anomalies_idx = [i for i,l in enumerate(labels) if l==1] 
         graph_path = f'results/{cfg.dataset_name}/{cfg.type}/{cfg.prompt_type}/minicpm_proposed_org_{cfg.dataset_name}_{cfg.type}_{cfg.prompt_type}.jpg'
         save_score_auc_graph(anomalies_idx, org_best_predicted, org_best_auc, graph_path)
-
-    
-        '''
-        ================================
-        combination operation (org+wa)
-        ================================
-        '''
-        best_auc = 0 
-        best_alpha = 0
-        for sigma in range(1, 100):
-            for num in np.arange(0.0, 1.1, 0.1):
-                # scoring
-                a1 = round(num, 1)
-                a2 = round(1-a1, 1)
-                agg_predicted = a1*predicted + a2*predicted_wa
-
-                # post-processing
-                g_predicted = gaussian_filter1d(agg_predicted, sigma=sigma)
-                mm_predicted = min_max_normalize(g_predicted)
-
-                # get auc
-                fpr, tpr, _ = metrics.roc_curve(labels, mm_predicted, pos_label=1)
-                auc = metrics.auc(fpr, tpr)
-
-                # update best auc
-                if auc > best_auc:
-                    best_auc = auc
-                    best_predicted = mm_predicted
-                    best_alpha = a1
-
-        ow_best_predicted = best_predicted
-        ow_best_auc = best_auc
-
-        print('best auc:', best_auc)
-        print(f'best alpha: ({best_alpha})*original+({1-best_alpha})*wa')
-        print('-----------------------------------')
-        anomalies_idx = [i for i,l in enumerate(labels) if l==1] 
-        graph_path = f'results/{cfg.dataset_name}/{cfg.type}/{cfg.prompt_type}/minicpm_proposed_ow_{cfg.dataset_name}_{cfg.type}_{cfg.prompt_type}.jpg'
-        save_score_auc_graph(anomalies_idx, ow_best_predicted, ow_best_auc, graph_path)
-
-
-        '''
-        ================================
-        combination operation (org+tc)
-        ================================
-        '''
-        best_auc = 0 
-        best_alpha = 0
-        for sigma in range(1, 100):
-            for num in np.arange(0.0, 1.1, 0.1):
-                # scoring
-                a1 = round(num, 1)
-                a2 = round(1-a1, 1)
-                agg_predicted = a1*predicted + a2*predicted_tc
-
-                # post-processing
-                g_predicted = gaussian_filter1d(agg_predicted, sigma=sigma)
-                mm_predicted = min_max_normalize(g_predicted)
-
-                # get auc
-                fpr, tpr, _ = metrics.roc_curve(labels, mm_predicted, pos_label=1)
-                auc = metrics.auc(fpr, tpr)
-
-                # update best auc
-                if auc > best_auc:
-                    best_auc = auc
-                    best_predicted = mm_predicted
-                    best_alpha = a1
-
-        ot_best_predicted = best_predicted
-        ot_best_auc = best_auc
-
-        print('best auc:', best_auc)
-        print(f'best alpha: ({best_alpha})*original+({1-best_alpha})*tc')
-        print('-----------------------------------')
-        anomalies_idx = [i for i,l in enumerate(labels) if l==1] 
-        graph_path = f'results/{cfg.dataset_name}/{cfg.type}/{cfg.prompt_type}/minicpm_proposed_ot_{cfg.dataset_name}_{cfg.type}_{cfg.prompt_type}.jpg'
-        save_score_auc_graph(anomalies_idx, ot_best_predicted, ot_best_auc, graph_path)
 
 
         '''
@@ -289,39 +210,20 @@ def main():
         combination operation (proposed)
         ================================
         '''
-        best_auc = 0 
-        best_alpha = 0
-        best_beta = 0
-        best_gamma = 0
+        # Aggregate with user-specified weights
+        agg_predicted = cfg.alpha * predicted + cfg.beta * predicted_wa + cfg.gamma * predicted_tc
 
-        for sigma in range(1, 100):
-            for a1 in np.arange(0.0, 1.1, 0.1):  
-                for a2 in np.arange(0.0, 1.1, 0.1):  
-                    a3 = 1 - a1 - a2
-                    if 0 <= a3 <= 1: 
-                        agg_predicted = a1*predicted + a2*predicted_wa + a3*predicted_tc
+        # post-processing with user-specified sigma
+        g_predicted = gaussian_filter1d(agg_predicted, sigma=cfg.sigma)
+        mm_predicted = min_max_normalize(g_predicted)
 
-                        # post-processing
-                        g_predicted = gaussian_filter1d(agg_predicted, sigma=sigma)
-                        mm_predicted = min_max_normalize(g_predicted)
+        # get auc
+        fpr, tpr, _ = metrics.roc_curve(labels, mm_predicted, pos_label=1)
+        combi_best_auc = metrics.auc(fpr, tpr)
+        combi_best_predicted = mm_predicted
 
-                        # get auc
-                        fpr, tpr, _ = metrics.roc_curve(labels, mm_predicted, pos_label=1)
-                        auc = metrics.auc(fpr, tpr)
-
-                        # update best auc
-                        if auc > best_auc:
-                            best_auc = auc
-                            best_predicted = mm_predicted
-                            best_alpha = a1
-                            best_beta = a2
-                            best_gamma = a3
-
-        combi_best_predicted = best_predicted
-        combi_best_auc = best_auc
-
-        print('best auc:', best_auc)
-        print(f'best alpha: ({best_alpha})*original+({best_beta})*wa+({best_gamma})*tc')
+        print(f'best auc (sigma={cfg.sigma}):', combi_best_auc)
+        print(f'weights: ({cfg.alpha})*original + ({cfg.beta})*wa + ({cfg.gamma})*tc')
         print('-----------------------------------')
         anomalies_idx = [i for i,l in enumerate(labels) if l==1] 
         graph_path = f'results/{cfg.dataset_name}/{cfg.type}/{cfg.prompt_type}/minicpm_proposed_combi_{cfg.dataset_name}_{cfg.type}_{cfg.prompt_type}.jpg'
