@@ -48,7 +48,7 @@ def main():
     parser.add_argument('--stride', default=False, type=str2bool, nargs='?', const=True)
     parser.add_argument('--model_path', default='Qwen/Qwen2.5-VL-3B-Instruct', type=str)
     parser.add_argument('--grid_search', default=True, type=str2bool, nargs='?', const=True)
-    parser.add_argument('--sigma_range', default='1,100', type=str)
+    parser.add_argument('--sigma_range', default='1,30', type=str)
     parser.add_argument('--weight_step', default=0.1, type=float)
     parser.add_argument('--sigma', default=15, type=int)
     parser.add_argument('--alpha', default=0.6, type=float)
