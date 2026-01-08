@@ -31,6 +31,7 @@ def main():
     parser.add_argument('--model_path', default='MiniCPM-Llama3-V-2_5', type=str)
     parser.add_argument('--grid_search', default=True, type=str2bool, nargs='?', const=True)
     parser.add_argument('--sigma_range', default='1,100', type=str)
+    parser.add_argument('--weight_step', default=0, help='not used option')
     parser.add_argument('--sigma', default=15, type=int)
     parser.add_argument('--alpha', default=0, type=float, help='not used option')
     parser.add_argument('--beta', default=0, type=float, help='not used option')

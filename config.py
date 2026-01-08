@@ -45,6 +45,11 @@ def update_config(args=None):
     share_config['mid_scale'] = args.mid_scale
     share_config['lge_scale'] = args.lge_scale
     share_config['stride'] = args.stride
+
+    # for evaluation
+    share_config['grid_search'] = args.grid_search
+    share_config['sigma_range'] = args.sigma_range
+    share_config['weight_step'] = args.weight_step
     share_config['sigma'] = args.sigma
     share_config['alpha'] = args.alpha
     share_config['beta'] = args.beta
