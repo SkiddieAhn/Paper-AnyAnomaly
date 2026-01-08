@@ -4,13 +4,12 @@ from data_loader import clip_path_loader, label_loader
 from config import update_config
 import argparse
 from fastprogress import progress_bar
-from sklearn import metrics
-from scipy.ndimage import gaussian_filter1d
 from functions.text_func import make_text_embedding
 from functions.qwen_vllm_func import make_instruction, load_lvlm, qwen_make_messages, lvlm_test
 from functions.attn_func import winclip_attention
 from functions.grid_func import grid_generation, four_generation
 from functions.key_func import KFS
+from functions.eval_func import evaluate_auc
 import clip
 from transformers import logging
 logging.set_verbosity_error()
@@ -48,36 +47,35 @@ def main():
     parser.add_argument('--sml_scale', default=True, type=str2bool, nargs='?', const=True)
     parser.add_argument('--stride', default=False, type=str2bool, nargs='?', const=True)
     parser.add_argument('--model_path', default='Qwen/Qwen2.5-VL-3B-Instruct', type=str)
-    parser.add_argument('--sigma', default=15, type=int, help='Gaussian filter sigma value for post-processing (1-20 works best for most datasets)')
-    parser.add_argument('--alpha', default=0.6, type=float, help='Weight for original score in combination (alpha + beta + gamma = 1.0)')
-    parser.add_argument('--beta', default=0.3, type=float, help='Weight for WA score in combination (alpha + beta + gamma = 1.0)')
-    parser.add_argument('--gamma', default=0.1, type=float, help='Weight for TC score in combination (alpha + beta + gamma = 1.0)')
+    parser.add_argument('--grid_search', default=True, type=str2bool, nargs='?', const=True)
+    parser.add_argument('--sigma_range', default='1,100', type=str)
+    parser.add_argument('--weight_step', default=0.1, type=float)
+    parser.add_argument('--sigma', default=15, type=int)
+    parser.add_argument('--alpha', default=0.6, type=float)
+    parser.add_argument('--beta', default=0.3, type=float)
+    parser.add_argument('--gamma', default=0.1, type=float)
 
     args = parser.parse_args()
     cfg = update_config(args)
     cfg.print_cfg()
 
-    # Validate that alpha + beta + gamma = 1.0
-    if not abs(cfg.alpha + cfg.beta + cfg.gamma - 1.0) < 1e-6:
-        raise ValueError(f"alpha({cfg.alpha}) + beta({cfg.beta}) + gamma({cfg.gamma}) must equal 1.0")
+    if not cfg.grid_search:
+        if not abs(cfg.alpha + cfg.beta + cfg.gamma - 1.0) < 1e-6:
+            raise ValueError(f"alpha({cfg.alpha}) + beta({cfg.beta}) + gamma({cfg.gamma}) must equal 1.0")
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu") 
     print(device)
 
-    # load video names and paths
     video_names, video_paths = load_names_paths(cfg)
 
-    # configure file
     predict_file_name = f'results/{cfg.dataset_name}/{cfg.type}/{cfg.prompt_type}/qwen_vllm_proposed_{cfg.dataset_name}_{cfg.type}_{cfg.prompt_type}.json'
 
-    # load keyword list
     keyword_list = load_keyword_list(cfg)
 
     print('-----------------------------')
     print('keyword list:', keyword_list)
     print('-----------------------------')
 
-    # make retults folders
     make_results_folders(cfg)
 
     '''
@@ -86,18 +84,11 @@ def main():
     ==============================
     '''
 
-    # anomaly detection
     if cfg.anomaly_detect:
-        # load lvlm
         model, processor, sampling_params = load_lvlm(cfg.model_path)
-
-        # load clip model
         clip_model, preprocess = clip.load('ViT-B/32', device=device)
-
-        # key frame selection method
         kfs = KFS(cfg.kfs_num, cfg.clip_length, clip_model, preprocess, device)
 
-        # processing videos
         dict_arr = []
         print_check = True
 
@@ -110,31 +101,25 @@ def main():
                 video_name = video_names[i]
                 cp_loader = clip_path_loader(video_path, cfg.clip_length)
 
-                # anomaly detection using LVLM (segment-level) 
                 for cp in cp_loader:
                     max_score = 0 
                     max_score_wa = 0 
                     max_score_tc = 0 
 
-                    # multiple keyword processing 
                     for k_i, keyword in enumerate(keyword_list):
                         instruction, instruction_tc = make_instruction(cfg, keyword)
                         print_check = print_prompt(print_check, instruction, instruction_tc)
 
-                        # text embedding
                         text_embedding = make_text_embedding(clip_model, device, text=keyword, type_list=cfg.type_list,
                                                               class_adaption=cfg.class_adaption, template_adaption=cfg.template_adaption)
 
-                        # context generation
                         main_key, wa_image, grid_image = context_generation(cfg, kfs, cp, keyword, k_i, text_embedding, clip_model, device)
 
-                        # context to message
                         messages_key = qwen_make_messages(main_key, instruction)
                         messages_wa = qwen_make_messages(wa_image, instruction)
                         messages_tc = qwen_make_messages(grid_image, instruction_tc)
                         message_list = [messages_key, messages_wa, messages_tc]
 
-                        # anomaly detection (batch processing)
                         responses = lvlm_test(model, processor, sampling_params, message_list)
                         score = generate_output(responses[0])['score']
                         score_wa = generate_output(responses[1])['score']
@@ -144,7 +129,6 @@ def main():
                         max_score_wa = max(max_score_wa, score_wa)
                         max_score_tc = max(max_score_tc, score_tc)
 
-                    # save frame scores
                     for _ in range(cfg.clip_length):
                         predicted.append(max_score)
                         predicted_wa.append(max_score_wa)
@@ -156,10 +140,8 @@ def main():
                                'scores_tc':predicted_tc}
                 dict_arr.append(output_dict)
 
-                # one video ok!
                 print(i, 'video:', video_path)
 
-            # save json file
             json.dump(dict_arr, file, indent=4)
 
 
@@ -169,7 +151,6 @@ def main():
     ==============================
     '''
 
-    # calculate auc
     if cfg.calc_auc:
         print('--------------------------------------')
         print('calculate total auc...')
@@ -195,72 +176,21 @@ def main():
             predicted_tc = np.concatenate(predicted_tc, axis=0)
             labels = np.concatenate(label_arr, axis=0)
 
-        '''
-        =======================
-        original operation
-        =======================
-        '''
-        # post-processing with user-specified sigma
-        g_predicted = gaussian_filter1d(predicted, sigma=cfg.sigma)
-        mm_predicted = min_max_normalize(g_predicted)
-
-        # get auc
-        fpr, tpr, _ = metrics.roc_curve(labels, mm_predicted, pos_label=1)
-        org_best_auc = metrics.auc(fpr, tpr)
-        org_best_predicted = mm_predicted
-
-        print(f'org auc (sigma={cfg.sigma}):', org_best_auc)
-        print('-----------------------------------')
-        anomalies_idx = [i for i,l in enumerate(labels) if l==1] 
-        graph_path = f'results/{cfg.dataset_name}/{cfg.type}/{cfg.prompt_type}/qwen_vllm_org_{cfg.dataset_name}_{cfg.type}_{cfg.prompt_type}.jpg'
-        save_score_auc_graph(anomalies_idx, org_best_predicted, org_best_auc, graph_path)
-
-
-        '''
-        ================================
-        combination operation (proposed)
-        ================================
-        '''
-        # Aggregate with user-specified weights
-        agg_predicted = cfg.alpha * predicted + cfg.beta * predicted_wa + cfg.gamma * predicted_tc
-
-        # post-processing with user-specified sigma
-        g_predicted = gaussian_filter1d(agg_predicted, sigma=cfg.sigma)
-        mm_predicted = min_max_normalize(g_predicted)
-
-        # get auc
-        fpr, tpr, _ = metrics.roc_curve(labels, mm_predicted, pos_label=1)
-        combi_best_auc = metrics.auc(fpr, tpr)
-        combi_best_predicted = mm_predicted
-
-        print(f'best auc (sigma={cfg.sigma}):', combi_best_auc)
-        print(f'weights: ({cfg.alpha})*original + ({cfg.beta})*wa + ({cfg.gamma})*tc')
-        print('-----------------------------------')
-        anomalies_idx = [i for i,l in enumerate(labels) if l==1] 
-        graph_path = f'results/{cfg.dataset_name}/{cfg.type}/{cfg.prompt_type}/qwen_vllm_combi_{cfg.dataset_name}_{cfg.type}_{cfg.prompt_type}.jpg'
-        save_score_auc_graph(anomalies_idx, combi_best_predicted, combi_best_auc, graph_path)
-
-
-    # save auc per video
-    if cfg.calc_video_auc:
+        eval_results = evaluate_auc(
+            predicted=predicted,
+            predicted_wa=predicted_wa,
+            predicted_tc=predicted_tc,
+            labels=labels,
+            cfg=cfg,
+            model_name='qwen_vllm',
+            video_names=video_names,
+            label_arr=label_arr
+        )
+        
         print('--------------------------------------')
-        print('save individual anomaly scores...')
+        print('Evaluation completed!')
+        print(f"Final AUC: {eval_results['combi_best_auc']:.4f}")
         print('--------------------------------------')
-
-        for i in progress_bar(range(len(label_arr)), total=len(label_arr)):
-            video_name = video_names[i]
-            video_gt = label_arr[i]
-
-            if i == 0:
-                len_past = 0
-            else:
-                len_past = len_past+len_present
-            len_present = len(label_arr[i])
-
-            video_pd = combi_best_predicted[len_past:len_past+len_present]
-            video_anomalies_idx = [j for j,l in enumerate(video_gt) if l==1] 
-            graph_path = f'results/{cfg.dataset_name}/{cfg.type}/{cfg.prompt_type}/videos/qwen_vllm_combi_{cfg.dataset_name}_{video_name}_{cfg.type}_{cfg.prompt_type}.jpg'
-            save_score_graph(video_anomalies_idx, video_pd, graph_path)
 
 
 if __name__=="__main__":
