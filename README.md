@@ -11,6 +11,12 @@ This repository is the ```official open-source``` of [AnyAnomaly: Zero-Shot Cust
 * **[2025/09/20]** The **Qwen2.5-VL utilizing vLLM** code has been released!
 * **[2025/05/10]** Our **codes and tutorials** are released!
 
+## Conference Presentation 
+<a href="https://www.youtube.com/watch?v=NV1ADHFMhFQ" target="_blank">
+<img src="https://github.com/user-attachments/assets/a7bd264d-24eb-4f36-8886-fee65125bfee" width="700" height="393"></a><br>
+<strong>Project:</strong> https://shacoding.com/2025/09/11/tbd-wacv-2026
+
+
 ## Description
 Video anomaly detection (VAD) is crucial for video analysis and surveillance in computer vision. However, existing VAD models rely on learned normal patterns, which makes them difficult to apply to diverse environments. Consequently, users should retrain models or develop separate AI models for new environments, which requires expertise in machine learning, high-performance hardware, and extensive data collection, limiting the practical usability of VAD. **To address these challenges, this study proposes customizable video anomaly detection (C-VAD) technique and the AnyAnomaly model. C-VAD considers user-defined text as an abnormal event and detects frames containing a specified event in a video.** We effectively implemented AnyAnomaly using a context-aware visual question answering without fine-tuning the large vision language model. To validate the effectiveness of the proposed model, we constructed C-VAD datasets and demonstrated the superiority of AnyAnomaly. Furthermore, our approach showed competitive performance on VAD benchmark datasets, achieving state-of-the-art results on the UBnormal dataset and outperforming other methods in generalization across all datasets.<br/><br/>
 <img width="850" alt="fig-1" src="https://github.com/user-attachments/assets/db865457-ffe5-41db-a424-51aebcc7ab4b"> 
