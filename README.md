@@ -1,8 +1,8 @@
 # AnyAnomaly: Zero-Shot Customizable Video Anomaly Detection with LVLM (WACV 2026)
 [![arXiv](https://img.shields.io/badge/arXiv-2503.04504-b31b1b.svg?logo=arXiv)](https://arxiv.org/abs/2503.04504)
-[![hf](https://img.shields.io/badge/🤗-Hugging%20Face-blue.svg)](https://huggingface.co/papers/2503.04504)
-[![Colab1](https://img.shields.io/badge/⚡-Colab%20Totorial%201-yellow.svg)](https://colab.research.google.com/drive/1vDU6j2c9YwVEhuvBbUHx5GjorwKKI6sX?usp=sharing)
-[![Colab2](https://img.shields.io/badge/⚡-Colab%20Tutorial%202-green.svg)](https://colab.research.google.com/drive/1xnXjvlUlB8DgbTVGRrwvuLRz2rFAbdQ5?usp=sharing)
+[![CvF](https://img.shields.io/badge/CvF-Website-DO9874)](https://github.com/SkiddieAhn/Paper-AnyAnomaly/edit/main/README.md)
+[![Project](https://img.shields.io/badge/Project-Website-87CEEB)](https://shacoding.com/2025/09/11/tbd-wacv-2026/)
+[![Video](https://img.shields.io/badge/Presentation-Slides-B762C1)](https://wacv.thecvf.com/virtual/2026/poster/527)
 
 This repository is the ```official open-source``` of [AnyAnomaly: Zero-Shot Customizable Video Anomaly Detection with LVLM](https://arxiv.org/pdf/2503.04504) by Sunghyun Ahn*, Youngwan Jo*, Kijung Lee, Sein Kwon, Inpyo Hong and Sanghyun Park. ```(*equally contributed)```
 
@@ -10,12 +10,6 @@ This repository is the ```official open-source``` of [AnyAnomaly: Zero-Shot Cust
 * **[2025/11/09]** Our paper has been accepted to **WACV 2026**!
 * **[2025/09/20]** The **Qwen2.5-VL utilizing vLLM** code has been released!
 * **[2025/05/10]** Our **codes and tutorials** are released!
-
-## Conference Presentation 
-<a href="https://www.youtube.com/watch?v=NV1ADHFMhFQ" target="_blank">
-<img src="https://github.com/user-attachments/assets/a7bd264d-24eb-4f36-8886-fee65125bfee" width="700" height="393"></a><br>
-<strong>Project:</strong> https://shacoding.com/2025/09/11/tbd-wacv-2026
-
 
 ## Description
 Video anomaly detection (VAD) is crucial for video analysis and surveillance in computer vision. However, existing VAD models rely on learned normal patterns, which makes them difficult to apply to diverse environments. Consequently, users should retrain models or develop separate AI models for new environments, which requires expertise in machine learning, high-performance hardware, and extensive data collection, limiting the practical usability of VAD. **To address these challenges, this study proposes customizable video anomaly detection (C-VAD) technique and the AnyAnomaly model. C-VAD considers user-defined text as an abnormal event and detects frames containing a specified event in a video.** We effectively implemented AnyAnomaly using a context-aware visual question answering without fine-tuning the large vision language model. To validate the effectiveness of the proposed model, we constructed C-VAD datasets and demonstrated the superiority of AnyAnomaly. Furthermore, our approach showed competitive performance on VAD benchmark datasets, achieving state-of-the-art results on the UBnormal dataset and outperforming other methods in generalization across all datasets.<br/><br/>
