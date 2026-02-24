@@ -1,6 +1,6 @@
 # AnyAnomaly: Zero-Shot Customizable Video Anomaly Detection with LVLM (WACV 2026)
 [![arXiv](https://img.shields.io/badge/arXiv-2503.04504-b31b1b.svg?logo=arXiv)](https://arxiv.org/abs/2503.04504)
-[![CvF](https://img.shields.io/badge/CvF-Website-DO9874)](https://github.com/SkiddieAhn/Paper-AnyAnomaly/edit/main/README.md)
+[![CvF](https://img.shields.io/badge/CvF-Website-DO9874)](https://github.com/SkiddieAhn/Paper-AnyAnomaly)
 [![Project](https://img.shields.io/badge/Project-Website-87CEEB)](https://shacoding.com/2025/09/11/tbd-wacv-2026/)
 [![Video](https://img.shields.io/badge/Presentation-Slides-B762C1)](https://wacv.thecvf.com/virtual/2026/poster/527)
 
