@@ -1,10 +1,10 @@
 # AnyAnomaly: Zero-Shot Customizable Video Anomaly Detection with LVLM (WACV 2026)
 [![arXiv](https://img.shields.io/badge/arXiv-2503.04504-b31b1b.svg?logo=arXiv)](https://arxiv.org/abs/2503.04504)
-[![CvF](https://img.shields.io/badge/CvF-Website-DO9874)](https://github.com/SkiddieAhn/Paper-AnyAnomaly)
+[![CvF](https://img.shields.io/badge/CvF-Website-DO9874)](https://openaccess.thecvf.com/content/WACV2026/html/Ahn_AnyAnomaly_Zero-Shot_Customizable_Video_Anomaly_Detection_with_LVLM_WACV_2026_paper.html)
 [![Project](https://img.shields.io/badge/Project-Website-87CEEB)](https://shacoding.com/2025/09/11/tbd-wacv-2026/)
 [![Video](https://img.shields.io/badge/Presentation-Website-B762C1)](https://wacv.thecvf.com/virtual/2026/poster/527)
 
-This repository is the ```official open-source``` of [AnyAnomaly: Zero-Shot Customizable Video Anomaly Detection with LVLM](https://arxiv.org/pdf/2503.04504) by Sunghyun Ahn*, Youngwan Jo*, Kijung Lee, Sein Kwon, Inpyo Hong and Sanghyun Park. ```(*equally contributed)```
+This repository is the ```official open-source``` of [AnyAnomaly: Zero-Shot Customizable Video Anomaly Detection with LVLM](https://openaccess.thecvf.com/content/WACV2026/papers/Ahn_AnyAnomaly_Zero-Shot_Customizable_Video_Anomaly_Detection_with_LVLM_WACV_2026_paper.pdf) by Sunghyun Ahn*, Youngwan Jo*, Kijung Lee, Sein Kwon, Inpyo Hong and Sanghyun Park. ```(*equally contributed)```
 
 ## 📣 News
 * **[2025/11/09]** Our paper has been accepted to **WACV 2026**!
