@@ -144,11 +144,13 @@ python -u vad_proposed_Qwen_vllm.py --dataset=shtech --multiple=True --type=jump
 ## Citation
 If you use our work, please consider citing:  
 ```Shell
-@article{ahn2025anyanomaly,
-  title={AnyAnomaly: Zero-Shot Customizable Video Anomaly Detection with LVLM},
-  author={Ahn, Sunghyun and Jo, Youngwan and Lee, Kijung and Kwon, Sein and Hong, Inpyo and Park, Sanghyun},
-  journal={arXiv preprint arXiv:2503.04504},
-  year={2025}
+@InProceedings{Ahn_2026_WACV,
+    author    = {Ahn, Sunghyun and Jo, Youngwan and Lee, Kijung and Kwon, Sein and Hong, Inpyo and Park, Sanghyun},
+    title     = {AnyAnomaly: Zero-Shot Customizable Video Anomaly Detection with LVLM},
+    booktitle = {Proceedings of the IEEE/CVF Winter Conference on Applications of Computer Vision (WACV)},
+    month     = {March},
+    year      = {2026},
+    pages     = {3026-3035}
 }
 ```
 
