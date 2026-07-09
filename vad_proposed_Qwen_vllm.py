@@ -5,7 +5,7 @@ from config import update_config
 import argparse
 from fastprogress import progress_bar
 from functions.text_func import make_text_embedding
-from functions.qwen_vllm_func import make_instruction, load_lvlm, qwen_make_messages, lvlm_test
+from functions.qwen_hf_func import make_instruction, load_lvlm, qwen_make_messages, lvlm_test
 from functions.attn_func import winclip_attention
 from functions.grid_func import grid_generation, four_generation
 from functions.key_func import KFS
